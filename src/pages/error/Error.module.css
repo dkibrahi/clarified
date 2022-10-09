@@ -1,0 +1,13 @@
+.error-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.error-page span {
+    color: red;
+}
+
+.error-page img {
+    width: 35vw;
+}

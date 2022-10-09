@@ -19,7 +19,7 @@ export default function Signup() {
         <form onSubmit={handleSubmit} className={styles["signup-form"]}>
             <h2>Signup</h2>
             <label>
-                <span>email:</span>
+                <span>Email:</span>
                 <input 
                     type='text'
                     onChange={(e) => setEmail(e.target.value)}
@@ -27,7 +27,7 @@ export default function Signup() {
                 />
             </label>
             <label>
-                <span>password:</span>
+                <span>Password:</span>
                 <input 
                     type='password'
                     onChange={(e) => setPassword(e.target.value)}
@@ -35,7 +35,7 @@ export default function Signup() {
                 />
             </label>
             <label>
-                <span>username:</span>
+                <span>Username:</span>
                 <input 
                     type='text'
                     onChange={(e) => setUsername(e.target.value)}
