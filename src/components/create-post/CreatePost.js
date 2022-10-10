@@ -8,8 +8,7 @@ import defaultProfileMale from '../../images/default-profile-male.png';
 import styles from './CreatePost.module.css';
 
 export default function CreatePost() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
+    const [post, setPost] = useState('');
 
     return (
         <form className={styles["create-post"]}>
@@ -17,8 +16,8 @@ export default function CreatePost() {
                 <img src={defaultProfileMale} alt='default male profile'/>
                 <input 
                     type='text'
-                    onChange={(e) => setEmail(e.target.value)}
-                    value={email}
+                    onChange={(e) => setPost(e.target.value)}
+                    value={post}
                     placeholder="Enter your thoughts..."
                 />
             </label>

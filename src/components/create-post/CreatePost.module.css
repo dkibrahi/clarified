@@ -1,10 +1,5 @@
 .create-post {
-    max-width: 540px;
-    width: 50%;
-    margin: 60px auto;
-    padding: 30px;
-    background-color: white;
-    border-radius: 10px;
+    box-shadow: none;
     overflow: auto;
 }
 
@@ -25,18 +20,7 @@
     background-color: #000080;
 }
 
-.create-post label {
-    display: block;
-    margin: 30px auto;
-}
-
-.create-post span {
-    display: block;
-}
-
 .create-post input {
-    padding: 8px 2px;
-    font-size: 1em;
     width: 75%;
     background-color: #F2F2F2;
     border-radius: 1em;
