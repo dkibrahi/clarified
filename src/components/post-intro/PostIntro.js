@@ -16,16 +16,16 @@ export default function PostIntro() {
 
   return (
     <div>
-      <form className={styles["post-intro"]}>
-            <label className={styles["main-input"]}>
-                <img src={defaultProfileMale} alt='default male profile'/>
+      <div>
+        <span className={styles.spanPost}>
+          <img src={defaultProfileMale} alt='default male profile'/>
                 <input 
                     type='text'
                     placeholder="Create a post"
                     onClick={handleClick}
                 />
-            </label>
-        </form>
+        </span>
+      </div>
     </div>
   )
 }
