@@ -1,11 +1,13 @@
-// styles
-import CreatePost from '../../components/create-post/CreatePost';
+// Components
+import PostIntro from '../../components/post-intro/PostIntro';
+
+// Styles
 import styles from './Home.module.css';
 
 export default function Home() {
   return (
     <div>
-      <CreatePost />
+      <PostIntro />
     </div>
   )
 }

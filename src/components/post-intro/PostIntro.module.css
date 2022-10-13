@@ -1,0 +1,29 @@
+.post-intro {
+    box-shadow: none;
+    overflow: auto;
+}
+
+.post-intro img {
+    width: 10%;
+    background-color: #F2F2F2;
+    border-radius: 50%;
+}
+
+.post-intro input {
+    width: 75%;
+    background-color: #F2F2F2;
+    border-radius: 1em;
+    text-indent: 1em;
+}
+
+.post-intro .main-input {
+    white-space: nowrap;
+    overflow-x: auto;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.post-intro .main-input img,
+.post-intro .main-input input {
+    vertical-align: middle;
+}

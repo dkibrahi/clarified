@@ -1,5 +1,6 @@
 // react imports
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
+import CreatePost from './components/create-post/CreatePost';
 
 // components
 import Navbar from './components/navbar/Navbar';
@@ -17,6 +18,7 @@ function App() {
           <Route exact path={'/'} component={Home}/>
           <Route path={'/login'} component={Login}/>
           <Route path={'/signup'} component={Signup}/>
+          <Route path={'/create'} component={CreatePost}/>
           <Route path={'*'} component={Error}/>
         </Switch>
       </BrowserRouter>
