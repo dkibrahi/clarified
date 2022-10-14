@@ -1,5 +1,5 @@
 .spanPost img {
-    width: 10%;
+    width: 5vw;
     background-color: #F2F2F2;
     border-radius: 50%;
 }
@@ -9,11 +9,4 @@
     background-color: #F2F2F2;
     border-radius: 1em;
     text-indent: 1em;
-}
-
-.spanPost {
-    white-space: nowrap;
-    overflow-x: auto;
-    display: flex;
-    justify-content: space-evenly;
 }

@@ -1,0 +1,9 @@
+.post-template {
+    display: flex;
+    background-color: white;
+    border: solid #202020;
+    margin: 2em;
+    padding: 0.5em;
+    white-space: nowrap;
+    overflow-x: auto;
+}
