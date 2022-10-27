@@ -3,12 +3,13 @@ import 'firebase/firestore';
 import 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBwr6tt1a4rml-F7RLCQerr_fUKB73K0eY",
-  authDomain: "finance-766f2.firebaseapp.com",
-  projectId: "finance-766f2",
-  storageBucket: "finance-766f2.appspot.com",
-  messagingSenderId: "261385166508",
-  appId: "1:261385166508:web:0254634c6198e04fbfc909"
+  apiKey: "AIzaSyCzRTyMVnxpWCpzX1dN1-3hcio1JJKDq7I",
+  authDomain: "clarafied.firebaseapp.com",
+  projectId: "clarafied",
+  storageBucket: "clarafied.appspot.com",
+  messagingSenderId: "1066354926954",
+  appId: "1:1066354926954:web:98adf90303d84937f7b113",
+  measurementId: "G-B3ENLW8V6F"
 };
 
 // initialize firebase token
