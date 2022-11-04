@@ -1,13 +1,51 @@
-// Components
-import PostIntro from '../../components/post-intro/PostIntro';
+// react imports
+import { projFirestore } from '../../firebase/config';
+import { useEffect, useState } from 'react';
 
-// Styles
+// styles
 import styles from './Home.module.css';
 
+// components
+import UserPosts from '../../components/user-posts/UserPosts';
+
+
 export default function Home() {
+  const [posts, setPosts] = useState(null);
+  const [isPending, setIsPending] = useState(false);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setIsPending(true);
+
+    const unsub = projFirestore.collection('posts').onSnapshot(snapshot => {
+      if (snapshot.empty) {
+        setError("No recipes to load");
+        setIsPending(false);
+      }
+
+      else {
+        let results = [];
+        snapshot.docs.forEach(doc => {
+          results.push( { id: doc.id, ...doc.data() });
+        })
+
+        setPosts(results);
+        setIsPending(false);
+      }
+    
+    }, (err) => {
+        setError(err.message);
+        setIsPending(false);
+      });
+
+    return () => unsub();
+  }, []);
+
   return (
-    <div>
-      <PostIntro />
+    <div className='home'>
+      {error && <p className='error'>{error}</p>}
+      {isPending && <p className='loading'>Loading...</p>}
+      {posts && <UserPosts posts={posts} />}
     </div>
   )
 }
