@@ -7,6 +7,7 @@ import styles from './Home.module.css';
 
 // components
 import UserPosts from '../../components/user-posts/UserPosts';
+import Loading from '../../components/loading-screen/Loading';
 
 
 export default function Home() {
@@ -44,7 +45,7 @@ export default function Home() {
   return (
     <div className='home'>
       {error && <p className='error'>{error}</p>}
-      {isPending && <p className='loading'>Loading...</p>}
+      {isPending && <Loading />}
       {posts && <UserPosts posts={posts} />}
     </div>
   )

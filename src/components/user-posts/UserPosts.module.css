@@ -1,0 +1,9 @@
+.posts-list {
+    display: flex;
+    flex-direction: column;
+    gap: 2vw;
+}
+
+.posts-list .card {
+    margin: 0 10%;
+}
