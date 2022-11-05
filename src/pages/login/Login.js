@@ -1,5 +1,6 @@
 // react imports
 import { useState } from 'react';
+import { Button, TextField } from '@mui/material';
 
 // components
 import Particle from '../../components/Particle/Particle';
@@ -9,11 +10,10 @@ import styles from './Login.module.css';
 
 export default function Login() {
     const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        console.log(email, password);
+        console.log(email);
     }
 
     return (
@@ -21,23 +21,12 @@ export default function Login() {
             <Particle/>
             <form onSubmit={handleSubmit} className={styles["login-form"]}>
                 <h2>Login</h2>
-                <label>
-                    <span>Email:</span>
-                    <input 
-                        type='text'
-                        onChange={(e) => setEmail(e.target.value)}
-                        value={email}
-                    />
-                </label>
-                {/* <label>
-                    <span>Password:</span>
-                    <input 
-                        type='password'
-                        onChange={(e) => {setPassword(e.target.value)}}
-                        value={password}
-                    />
-                </label> */}
-                <button className='btn'>Login</button>
+                <TextField 
+                    id="outlined-basic" 
+                    label="Email here" 
+                    variant="outlined" 
+                    onChange={(e) =>setEmail(e.target.value)}/>
+                <Button variant="outlined">Log in</Button>
             </form>
         </div>
   )
