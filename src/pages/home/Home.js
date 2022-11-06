@@ -20,7 +20,7 @@ export default function Home() {
 
     const unsub = projFirestore.collection('posts').onSnapshot(snapshot => {
       if (snapshot.empty) {
-        setError("No recipes to load");
+        setError("No posts to load");
         setIsPending(false);
       }
 

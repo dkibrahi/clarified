@@ -3,8 +3,3 @@
     flex-direction: column;
     gap: 2vw;
 }
-
-.posts-list .card {
-    margin: 0 15%;
-    padding: 1em;
-}
