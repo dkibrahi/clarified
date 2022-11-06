@@ -1,7 +1,7 @@
 // react imports
 import { Link } from 'react-router-dom';
 import HomeIcon from '@mui/icons-material/Home';
-import CreateIcon from '@mui/icons-material/Create';
+import AddIcon from '@mui/icons-material/Add';
 
 // styles
 import styles from './Navbar.module.css';
@@ -18,7 +18,7 @@ export default function Navbar() {
             </li>
             <li>
               <Link to='/create'>
-              <CreateIcon color="primary"/>
+              <AddIcon color="primary"/>
               </Link>
             </li>
 {/* 

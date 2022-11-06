@@ -1,3 +1,8 @@
-.options {
+.optionsIcon {
     float: right;
+}
+
+
+.editIcon, .deleteIcon {
+    margin: auto;
 }

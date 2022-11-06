@@ -4,26 +4,11 @@ import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
+import DeleteIcon from '@mui/icons-material/Delete';
+import CreateIcon from '@mui/icons-material/Create';
 
 // styles
 import styles from './MoreOptions.module.css';
-
-const options = [
-  'None',
-  'Atria',
-  'Callisto',
-  'Dione',
-  'Ganymede',
-  'Hangouts Call',
-  'Luna',
-  'Oberon',
-  'Phobos',
-  'Pyxis',
-  'Sedna',
-  'Titania',
-  'Triton',
-  'Umbriel',
-];
 
 const ITEM_HEIGHT = 48;
 
@@ -40,7 +25,7 @@ export default function MoreOptions() {
   };
 
   return (
-    <div className={styles.options}>
+    <div className={styles.optionsIcon}>
       <IconButton
         aria-label="more"
         id="long-button"
@@ -62,15 +47,18 @@ export default function MoreOptions() {
         PaperProps={{
           style: {
             maxHeight: ITEM_HEIGHT * 4.5,
-            width: '20ch',
+            width: '7ch',
           },
         }}
       >
-        {options.map((option) => (
-          <MenuItem key={option} selected={option === 'Pyxis'} onClick={handleClose}>
-            {option}
+        <div className={styles.toggleIcons}>
+          <MenuItem key="edit" onClick={handleClose}>
+              <CreateIcon className={styles.editIcon}/>
           </MenuItem>
-        ))}
+          <MenuItem key="delete" onClick={handleClose}>
+              <DeleteIcon className={styles.deleteIcon}/>
+          </MenuItem>
+        </div>
       </Menu>
     </div>
   )

@@ -1,7 +1,7 @@
 const particlesConfig = {
     background: {
         color: {
-            value: "#1f9751",
+            value: "#1976d2",
         },
     },
     fpsLimit: 60,
@@ -22,7 +22,7 @@ const particlesConfig = {
         quantity: 4,
         },
         repulse: {
-        distance: 200,
+        distance: 100,
         },
     },
     },
@@ -47,7 +47,7 @@ const particlesConfig = {
         default: "bounce",
         },
         random: false,
-        speed: 3,
+        speed: 2,
         straight: false,
     },
     number: {
