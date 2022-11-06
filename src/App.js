@@ -4,10 +4,11 @@ import CreatePost from './components/create-post/CreatePost';
 
 // components
 import Navbar from './components/navbar/Navbar';
+import SinglePost from './components/single-post/SinglePost';
 import Error from './pages/error/Error';
 import Home from './pages/home/Home';
 import Login from './pages/login/Login';
-import Signup from './pages/signup/Signup';
+// import Signup from './pages/signup/Signup';
 
 function App() {
   return (
@@ -17,9 +18,10 @@ function App() {
         <Switch>
           <Route exact path={'/'} component={Login}/>
           <Route path={'/login'} component={Login}/>
-          <Route path={'/home'} component={Home}/>
+          <Route exact path={'/home'} component={Home}/>
           {/* <Route path={'/signup'} component={Signup}/> */}
           <Route path={'/create'} component={CreatePost}/>
+          <Route path='/posts/:id' component={SinglePost}/>
           <Route path={'*'} component={Error}/>
         </Switch>
       </BrowserRouter>

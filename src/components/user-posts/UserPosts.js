@@ -1,7 +1,7 @@
 // react imports
-import { Card, CardContent } from '@mui/material';
+import { Card, CardContent, Fab } from '@mui/material';
+import NavigationIcon from '@mui/icons-material/Navigation';
 import { Link } from 'react-router-dom';
-import { projFirestore } from '../../firebase/config';
 
 // styles 
 import styles from './UserPosts.module.css';
@@ -21,8 +21,14 @@ export default function UserPosts( { posts } ) {
               <p>{post.time}</p>
               <CardContent>
                 <div>{post.content.substring(0, 100)}...</div>
+                {console.log(post.content.substring(0, 100))}
               </CardContent>
-              <Link to={`/posts/${post.id}`}>View full post</Link>
+              <Link to={`/posts/${post.id}`}>
+                <Fab variant="extended">
+                  <NavigationIcon sx={{ mr: 1 }} />
+                  Full Post
+                </Fab>
+              </Link>
             </Card>
         ))}
     </div>
