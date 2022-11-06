@@ -24,7 +24,7 @@ export default function UserPosts( { posts } ) {
                 {console.log(post.content.substring(0, 100))}
               </CardContent>
               <Link to={`/posts/${post.id}`}>
-                <Fab variant="extended">
+                <Fab variant="extended" size="small">
                   <NavigationIcon sx={{ mr: 1 }} />
                   Full Post
                 </Fab>
