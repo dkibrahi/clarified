@@ -1,5 +1,9 @@
 // react imports
 import { useState } from 'react'; 
+import { projFirestore } from '../../firebase/config';
+
+
+// icons
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
@@ -7,12 +11,14 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 
+
+
 // styles
 import styles from './MoreOptions.module.css';
 
 const ITEM_HEIGHT = 48;
 
-export default function MoreOptions() {
+export default function MoreOptions({ postID }) {
   const [showOptions, setShowOptions] = useState(null);
   const open = Boolean(showOptions);
 
@@ -22,6 +28,11 @@ export default function MoreOptions() {
 
   const handleClose = () => {
     setShowOptions(null);
+  };
+
+  const handleDelete = () => {
+    setShowOptions(null);
+    projFirestore.collection('posts').doc(postID).delete();
   };
 
   return (
@@ -55,7 +66,7 @@ export default function MoreOptions() {
           <MenuItem key="edit" onClick={handleClose}>
               <CreateIcon className={styles.editIcon}/>
           </MenuItem>
-          <MenuItem key="delete" onClick={handleClose}>
+          <MenuItem key="delete" onClick={handleDelete}>
               <DeleteIcon className={styles.deleteIcon}/>
           </MenuItem>
         </div>

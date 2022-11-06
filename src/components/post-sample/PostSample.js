@@ -13,7 +13,7 @@ import MoreOptions from '../more-options/MoreOptions';
 export default function PostSample({ post }) {
   return (
     <Card variant="outlined" className={styles.card}>
-        <MoreOptions size="small"/>
+        <MoreOptions size="small" postID={post.id}/>
         <h3>{post.title}</h3>
         <p>{post.time}</p>
         <CardContent>
