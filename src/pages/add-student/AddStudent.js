@@ -1,9 +1,7 @@
 // react imports
-import { useRef, useState } from 'react';
+import { useRef } from 'react';
 import { Button, TextField } from '@mui/material';
 import { FormGroup, FormControlLabel, Checkbox } from '@mui/material';
-import Alert from '@mui/material/Alert';
-import AlertTitle from '@mui/material/AlertTitle';
 import { projFirestore } from '../../firebase/config';
 
 // components
@@ -11,15 +9,20 @@ import Particle from '../../components/Particle/Particle';
 
 // styles
 import styles from './AddStudent.module.css';
+import SuccessAlert from '../../components/success-alert/SuccessAlert';
 
 export default function AddStudent() {
     const uniqname = useRef('');
-    // const showAlert = useRef(true);
-    const [showAlert, setShowAlert] = useState(true);
     const isAdmin = useRef(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if (!validInput(uniqname.current)) {
+            // put error message
+            alert("Not a valid uniqname"); // placeholder for error
+            // return;
+        }
         
         try {
             await projFirestore.collection('users').doc(uniqname.current).set({
@@ -33,6 +36,31 @@ export default function AddStudent() {
     const handleChange = (event) => {
         isAdmin.current = event.target.checked;
     };
+
+    const cleanInput = (umichName) => {
+        const length = umichName.length;
+
+        if (length === 0) {
+            return;
+        }
+
+        umichName = umichName.toLowerString();
+        umichName.trim();
+
+        return umichName;
+    }
+
+    const validInput = (umichName) => {
+        umichName = cleanInput(umichName);
+
+        const length = umichName.length;
+
+        if (length < 3 || length > 8) {
+            return false;
+        }
+        
+
+    }
 
     return (
         <>
@@ -56,12 +84,7 @@ export default function AddStudent() {
                 </FormGroup>
                 <Button variant="outlined" onClick={handleSubmit}>Add</Button>
             </form>
-            { showAlert && 
-                <Alert severtiy="success" onClose={() => {setShowAlert(false)}}>
-                    <AlertTitle>Success</AlertTitle>
-                    This is a success alert — check it out!
-                </Alert>
-            }
+            {/* <SuccessAlert /> */}
         </>
   )
 }
