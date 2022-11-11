@@ -1,7 +1,10 @@
 // react imports
 import { Link } from 'react-router-dom';
+
+// icons
 import HomeIcon from '@mui/icons-material/Home';
 import AddIcon from '@mui/icons-material/Add';
+import ContactsIcon from '@mui/icons-material/Contacts';
 
 // styles
 import styles from './Navbar.module.css';
@@ -21,9 +24,12 @@ export default function Navbar() {
               <AddIcon color="primary"/>
               </Link>
             </li>
-{/* 
-            <li><Link to='/login'>Login</Link></li>
-            <li><Link to='/signup'>Signup</Link></li> */}
+
+             <li>
+              <Link to='/addstudent'>
+              <ContactsIcon color="primary"/>
+              </Link>
+            </li>
         </ul>
     </nav>
   )
