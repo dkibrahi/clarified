@@ -4,20 +4,20 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 
 // styles
-import styles from './SuccessAlert.module.css';
+import styles from './AlertUser.module.css';
 
-export default function SuccessAlert() {
+export default function AlertUser({ severity, title, description }) {
     const [showAlert, setShowAlert] = useState(true);
 
     return (
         <>
             { showAlert && 
                     <Alert 
-                        severtiy="success" 
-                        className={styles.successAlert}
+                        severtiy={severity}
+                        className={styles.alert}
                         onClose={() => {setShowAlert(false)}}>
-                        <AlertTitle>Success</AlertTitle>
-                        This is a success alert — check it out!
+                        <AlertTitle>{title}</AlertTitle>
+                        {description}
                     </Alert>
             }
         </>

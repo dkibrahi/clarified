@@ -6,10 +6,10 @@ import { projFirestore } from '../../firebase/config';
 
 // components
 import Particle from '../../components/Particle/Particle';
+import AlertUser from '../../components/alert-user/AlertUser';
 
 // styles
 import styles from './AddStudent.module.css';
-import SuccessAlert from '../../components/success-alert/SuccessAlert';
 
 export default function AddStudent() {
     const uniqname = useRef('');
@@ -18,10 +18,10 @@ export default function AddStudent() {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (!validInput(uniqname.current)) {
+        if (!uniqname.current || !validInput(uniqname.current)) {
             // put error message
             alert("Not a valid uniqname"); // placeholder for error
-            // return;
+            return;
         }
         
         try {
@@ -38,13 +38,7 @@ export default function AddStudent() {
     };
 
     const cleanInput = (umichName) => {
-        const length = umichName.length;
-
-        if (length === 0) {
-            return;
-        }
-
-        umichName = umichName.toLowerString();
+        umichName = umichName.toLowerCase();
         umichName.trim();
 
         return umichName;
@@ -58,8 +52,10 @@ export default function AddStudent() {
         if (length < 3 || length > 8) {
             return false;
         }
-        
 
+        const onlyLowercase = /^[a-z]+$/.test(umichName);
+        
+        return onlyLowercase;
     }
 
     return (
@@ -84,7 +80,7 @@ export default function AddStudent() {
                 </FormGroup>
                 <Button variant="outlined" onClick={handleSubmit}>Add</Button>
             </form>
-            {/* <SuccessAlert /> */}
+            <AlertUser />
         </>
   )
 }

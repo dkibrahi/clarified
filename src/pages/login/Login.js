@@ -9,7 +9,7 @@ import Particle from '../../components/Particle/Particle';
 import styles from './Login.module.css';
 
 export default function Login() {
-    const email = useRef('');
+    const [email, setEmail] = useRef('');
 
     const handleSubmit = (e) => {
         e.preventDefault();
