@@ -1,34 +1,27 @@
 // react imports
-import { useRef } from 'react';
-import { Button, TextField } from '@mui/material';
+
 
 // components
 import Particle from '../../components/Particle/Particle';
+import Form from '../../components/form/Form';
 
 // styles
 import styles from './Login.module.css';
 
 export default function Login() {
-    const [email, setEmail] = useRef('');
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(email);
+    const handleSubmit = (email) => {
+        alert(email);
     }
 
     return (
         <>
             <Particle/>
-            <form className={styles["login-form"]}>
-                <h2>Login</h2>
-                <TextField 
-                    id="outlined-basic" 
-                    label="Email here" 
-                    variant="outlined" 
-                    onChange={(e) => email.current = e.target.value }
-                    />
-                <Button variant="outlined" onClick={handleSubmit}>Log in</Button>
-            </form>
+            <Form 
+                title="Log in"
+                label="Email here"
+                buttonText="Log in"
+                handleSubmit={handleSubmit}
+            />
         </>
   )
 }

@@ -1,11 +1,10 @@
 // react imports
 import { useRef } from 'react';
-import { Button, TextField } from '@mui/material';
-import { FormGroup, FormControlLabel, Checkbox } from '@mui/material';
 import { projFirestore } from '../../firebase/config';
 
 // components
 import Particle from '../../components/Particle/Particle';
+import Form from '../../components/form/Form';
 import AlertUser from '../../components/alert-user/AlertUser';
 
 // styles
@@ -61,26 +60,22 @@ export default function AddStudent() {
     return (
         <>
             <Particle/>
-            <form className={styles["login-form"]}>
-                <h2>Add Student</h2>
-                <TextField 
-                    id="outlined-basic" 
-                    label="UMICH uniqname here" 
-                    variant="outlined" 
-                    onChange={(e) => uniqname.current = e.target.value }
-                    />
+            <Form
+                title="Add Student"
+                label="uniqname"
+                buttonText="Add"
+                handleSubmit={handleSubmit}
+            />
+            {/* <AlertUser /> */}
+        </>
+  )
+}
 
-                <FormGroup>
+{/* <FormGroup>
                     <FormControlLabel control= {
                     <Checkbox 
                         onChange={handleChange}
                         inputProps={{ 'aria-label': 'controlled' }}
                     />
                     } label="Admin Privileges" />
-                </FormGroup>
-                <Button variant="outlined" onClick={handleSubmit}>Add</Button>
-            </form>
-            <AlertUser />
-        </>
-  )
-}
+                </FormGroup> */}
