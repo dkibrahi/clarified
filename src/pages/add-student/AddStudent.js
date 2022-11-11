@@ -1,6 +1,9 @@
 // react imports
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 import { Button, TextField } from '@mui/material';
+import { FormGroup, FormControlLabel, Checkbox } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 import { projFirestore } from '../../firebase/config';
 
 // components
@@ -11,19 +14,25 @@ import styles from './AddStudent.module.css';
 
 export default function AddStudent() {
     const uniqname = useRef('');
+    // const showAlert = useRef(true);
+    const [showAlert, setShowAlert] = useState(true);
+    const isAdmin = useRef(false);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         
-        const doc = { isAdmin: false };
-
         try {
-            await projFirestore.collection('recipes').add(doc);
+            await projFirestore.collection('users').doc(uniqname.current).set({
+                isAdmin: isAdmin.current
+            })
         } catch(err) {
-        console.log(err);
-
+            console.log(err);
         }
     }
+
+    const handleChange = (event) => {
+        isAdmin.current = event.target.checked;
+    };
 
     return (
         <>
@@ -36,8 +45,23 @@ export default function AddStudent() {
                     variant="outlined" 
                     onChange={(e) => uniqname.current = e.target.value }
                     />
+
+                <FormGroup>
+                    <FormControlLabel control= {
+                    <Checkbox 
+                        onChange={handleChange}
+                        inputProps={{ 'aria-label': 'controlled' }}
+                    />
+                    } label="Admin Privileges" />
+                </FormGroup>
                 <Button variant="outlined" onClick={handleSubmit}>Add</Button>
             </form>
+            { showAlert && 
+                <Alert severtiy="success" onClose={() => {setShowAlert(false)}}>
+                    <AlertTitle>Success</AlertTitle>
+                    This is a success alert — check it out!
+                </Alert>
+            }
         </>
   )
 }
