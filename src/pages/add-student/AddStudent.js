@@ -1,40 +1,30 @@
 // react imports
-import { useRef } from 'react';
 import { projFirestore } from '../../firebase/config';
 
 // components
 import Particle from '../../components/Particle/Particle';
 import Form from '../../components/form/Form';
-import AlertUser from '../../components/alert-user/AlertUser';
 
 // styles
 import styles from './AddStudent.module.css';
 
 export default function AddStudent() {
-    const uniqname = useRef('');
-    const isAdmin = useRef(false);
-
-    const handleSubmit = async (e) => {
-        e.preventDefault();
-
-        if (!uniqname.current || !validInput(uniqname.current)) {
-            // put error message
-            alert("Not a valid uniqname"); // placeholder for error
-            return;
+    const handleSubmit = async (uniqname) => {
+        if (!uniqname || !validInput(uniqname)) {
+            return false;
         }
         
         try {
-            await projFirestore.collection('users').doc(uniqname.current).set({
-                isAdmin: isAdmin.current
-            })
+            await projFirestore.collection('users').doc(uniqname).set({
+                isAdmin: false
+            });
+
+            return true;
         } catch(err) {
             console.log(err);
+            return false;
         }
     }
-
-    const handleChange = (event) => {
-        isAdmin.current = event.target.checked;
-    };
 
     const cleanInput = (umichName) => {
         umichName = umichName.toLowerCase();
@@ -62,20 +52,11 @@ export default function AddStudent() {
             <Particle/>
             <Form
                 title="Add Student"
-                label="uniqname"
                 buttonText="Add"
                 handleSubmit={handleSubmit}
+                successMessage="Student was added succesfully"
+                failMessage="Student could not be added. Invalid uniqname"
             />
-            {/* <AlertUser /> */}
         </>
   )
 }
-
-{/* <FormGroup>
-                    <FormControlLabel control= {
-                    <Checkbox 
-                        onChange={handleChange}
-                        inputProps={{ 'aria-label': 'controlled' }}
-                    />
-                    } label="Admin Privileges" />
-                </FormGroup> */}

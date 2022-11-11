@@ -6,14 +6,14 @@ import AlertTitle from '@mui/material/AlertTitle';
 // styles
 import styles from './AlertUser.module.css';
 
-export default function AlertUser({ severity, title, description }) {
-    const [showAlert, setShowAlert] = useState(true);
+export default function AlertUser({ display, severity, title, description }) {
+    const [showAlert, setShowAlert] = useState(display);
 
     return (
         <>
             { showAlert && 
                     <Alert 
-                        severtiy={severity}
+                        severity={severity}
                         className={styles.alert}
                         onClose={() => {setShowAlert(false)}}>
                         <AlertTitle>{title}</AlertTitle>

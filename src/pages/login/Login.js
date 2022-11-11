@@ -18,7 +18,6 @@ export default function Login() {
             <Particle/>
             <Form 
                 title="Log in"
-                label="Email here"
                 buttonText="Log in"
                 handleSubmit={handleSubmit}
             />

@@ -14,3 +14,11 @@
 .login-form button {
     width: 20%;
 }
+
+.login-form span {
+    color: darkgrey;
+}
+
+.login-form .input-bar {
+    width: 100%;
+}
