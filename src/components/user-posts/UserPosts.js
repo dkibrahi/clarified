@@ -1,7 +1,7 @@
-// react imports
+// components
+import PostSample from '../post-sample/PostSample';
 
 // styles 
-import PostSample from '../post-sample/PostSample';
 import styles from './UserPosts.module.css';
 
 // component that takes ALL user posts and outputs them

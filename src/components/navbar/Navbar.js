@@ -24,7 +24,6 @@ export default function Navbar() {
               <AddIcon color="primary"/>
               </Link>
             </li>
-
              <li>
               <Link to='/addstudent'>
               <ContactsIcon color="primary"/>

@@ -8,6 +8,7 @@ import styles from './Home.module.css';
 // components
 import UserPosts from '../../components/user-posts/UserPosts';
 import Loading from '../../components/loading-screen/Loading';
+import AlertUser from '../../components/alert-user/AlertUser';
 
 
 export default function Home() {
@@ -41,6 +42,7 @@ export default function Home() {
 
     return () => unsub();
   }, []);
+
 
   return (
     <div className='home'>

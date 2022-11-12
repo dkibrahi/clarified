@@ -1,6 +1,6 @@
 // react imports
 import { Card, CardContent, Fab } from '@mui/material';
-import NavigationIcon from '@mui/icons-material/Navigation';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 import { Link } from 'react-router-dom';
 
 // styles 
@@ -21,7 +21,7 @@ export default function PostSample({ post }) {
         </CardContent>
         <Link to={`/posts/${post.id}`}>
         <Fab variant="extended" size="small">
-            <NavigationIcon sx={{ mr: 1 }} />
+            <VisibilityIcon sx={{ mr: 1 }} />
             Full Post
         </Fab>
         </Link>
