@@ -1,6 +1,7 @@
 // react imports
 import { projFirestore } from '../../firebase/config';
 import {useLocation} from "react-router-dom";
+import { useHistory } from 'react-router-dom';
 
 // icons
 import { Card, CardContent } from '@mui/material';
@@ -14,11 +15,13 @@ import MoreOptions from '../../components/more-options/MoreOptions';
 import styles from './ViewPost.module.css';
 
 export default function ViewPost() {
+    const history = useHistory();
     const data = useLocation();
     const post = data.state.post;
 
     const handleDelete = () => {
         projFirestore.collection('posts').doc(post.id).delete();
+        history.push('/home')
     }
 
     return (
