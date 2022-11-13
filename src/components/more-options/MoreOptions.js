@@ -1,7 +1,5 @@
 // react imports
 import { useState } from 'react'; 
-import { projFirestore } from '../../firebase/config';
-
 
 // icons
 import IconButton from '@mui/material/IconButton';
@@ -11,23 +9,16 @@ import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
 import FlagIcon from '@mui/icons-material/Flag';
-import Button from '@mui/material/Button';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import TextField from '@mui/material/TextField';
 
 // styles
 import styles from './MoreOptions.module.css';
+import PopUpDialog from '../popup-dialog/PopUpDialog';
 
 const ITEM_HEIGHT = 48;
 
-export default function MoreOptions({ postID, displaySuccess, displayFailure }) {
+export default function MoreOptions(props) {
   const [showOptions, setShowOptions] = useState(null);
   const [showDialog, setShowDialog] = useState(false);
-  const [description, setDescription] = useState('');
   const open = Boolean(showOptions);
 
   const handleClick = (e) => {
@@ -40,27 +31,12 @@ export default function MoreOptions({ postID, displaySuccess, displayFailure }) 
 
   const handleDelete = () => {
     setShowOptions(null);
-    projFirestore.collection('posts').doc(postID).delete();
+    props.handleDelete(); // let parent delete specific 
   };
 
-  const handleFlag = () => {
-    setShowDialog(true);
-  }
-
-  const closeFlag = () => {
+  const handleSend = async (dialogDescription) => {
     setShowDialog(false);
-  }
-
-  const handleSend = async () => {
-    const doc = { postID, reportedBy: "dkibrahi", description };
-
-    try {
-      await projFirestore.collection('reports').add(doc);
-    } catch(err) {
-      console.log(err);
-    }
-
-    setShowDialog(false);
+    props.handleFlag(dialogDescription);
   }
 
   return (
@@ -91,46 +67,18 @@ export default function MoreOptions({ postID, displaySuccess, displayFailure }) 
         }}
       >
         <div className={styles.toggleIcons}>
-          <MenuItem key="edit" onClick={handleClose}>
-              <CreateIcon className={styles.editIcon}/>
-          </MenuItem>
-          <MenuItem key="delete" onClick={handleDelete}>
-              <DeleteIcon className={styles.deleteIcon}/>
-          </MenuItem>
-          <MenuItem key="delete" onClick={handleFlag}>
-              <FlagIcon className={styles.deleteIcon}/>
-          </MenuItem>
+          {props.displayEdit && <MenuItem key="edit" onClick={handleClose}>
+              <CreateIcon className={styles.editIcon}/> 
+          </MenuItem> }
+          {props.displayDelete && <MenuItem key="delete" onClick={handleDelete}>
+              <DeleteIcon className={styles.deleteIcon}/> 
+          </MenuItem> }
+          {props.displayFlag && <MenuItem key="flag" onClick={() => setShowDialog(true)}>
+              <FlagIcon className={styles.flagIcon}/>
+              {showDialog && <PopUpDialog handleSend={handleSend}/> }
+          </MenuItem> }
         </div>
       </Menu>
-      <Dialog
-        open={showDialog}
-        onClose={closeFlag}
-        aria-labelledby="alert-dialog-title"
-        aria-describedby="alert-dialog-description"
-      >
-        <DialogTitle id="alert-dialog-title">
-          {"Report User"}
-        </DialogTitle>
-        <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            Let us know what was wrong about the comment.
-          </DialogContentText>
-          <TextField
-            autoFocus
-            onChange={(e) => setDescription(e.target.value) }
-            margin="dense"
-            id="name"
-            label="Description"
-            type="report"
-            fullWidth
-            variant="standard"
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={closeFlag}>Cancel</Button>
-          <Button onClick={handleSend}>Send</Button>
-        </DialogActions>
-      </Dialog>
     </div>
   )
 }
