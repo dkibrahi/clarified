@@ -31,8 +31,13 @@ export default function MoreOptions(props) {
 
   const handleDelete = () => {
     setShowOptions(null);
-    props.handleDelete(); // let parent delete specific 
+    props.handleDelete(); // let parent delete specific post
   };
+
+  const handleEdit = () => {
+    setShowOptions(null);
+    props.handleEdit();
+  }
 
   const handleSend = async (dialogDescription) => {
     setShowDialog(false);
@@ -67,7 +72,7 @@ export default function MoreOptions(props) {
         }}
       >
         <div className={styles.toggleIcons}>
-          {props.displayEdit && <MenuItem key="edit" onClick={handleClose}>
+          {props.displayEdit && <MenuItem key="edit" onClick={handleEdit}>
               <CreateIcon className={styles.editIcon}/> 
           </MenuItem> }
           {props.displayDelete && <MenuItem key="delete" onClick={handleDelete}>

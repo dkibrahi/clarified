@@ -1,6 +1,6 @@
 // react imports
 import { projFirestore } from '../../firebase/config';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 // icons
 import { Card, CardContent, Fab } from '@mui/material';
@@ -15,8 +15,20 @@ import styles from './PostSample.module.css';
 
 
 export default function PostSample({ post }) {
-  const handleDelete = () => {
-    projFirestore.collection('posts').doc(post.id).delete();
+  const history = useHistory();
+
+  const handleDelete = async () => {
+    await projFirestore.collection('posts').doc(post.id).delete();
+  }
+
+  const handleEdit = () => {
+    history.push({
+      pathname: `/posts/${post.id}`,
+      state: { 
+        post: post,
+        edit: true
+      }
+    }); 
   }
 
   return (
@@ -25,6 +37,7 @@ export default function PostSample({ post }) {
           size="small" 
           postID={post.id}
           handleDelete={handleDelete}
+          handleEdit={handleEdit}
           displayEdit={true}
           displayDelete={true}
           displayFlag={false}
@@ -32,7 +45,7 @@ export default function PostSample({ post }) {
         <h3>{post.title}</h3>
         <p>{post.time}</p>
         <CardContent>
-          <div>{post.content.substring(0, 100)}...</div>
+          <div>{post.content.substring(0, 100)}</div>
         </CardContent>
         <Link to={{
             pathname: `/posts/${post.id}`,
