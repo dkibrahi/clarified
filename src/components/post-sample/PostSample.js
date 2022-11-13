@@ -19,33 +19,25 @@ export default function PostSample({ post }) {
     projFirestore.collection('posts').doc(post.id).delete();
   }
 
-  const handleFlag = async (flagDescription) => {
-    const doc = { postID: post.id, reportedBy: "dkibrahi", flagDescription };
-
-    try {
-      await projFirestore.collection('reports').add(doc);
-    } catch(err) {
-      console.log(err);
-    }
-  }
-
   return (
     <Card variant="outlined" className={styles.card}>
         <MoreOptions 
           size="small" 
           postID={post.id}
           handleDelete={handleDelete}
-          handleFlag={handleFlag}
           displayEdit={true}
           displayDelete={true}
-          displayFlag={true}
+          displayFlag={false}
         />
         <h3>{post.title}</h3>
         <p>{post.time}</p>
         <CardContent>
-        <div>{post.content.substring(0, 100)}...</div>
+          <div>{post.content.substring(0, 100)}...</div>
         </CardContent>
-        <Link to={`/posts/${post.id}`}>
+        <Link to={{
+            pathname: `/posts/${post.id}`,
+            state: { post: post}
+          }}>
         <Fab variant="extended" size="small">
             <VisibilityIcon sx={{ mr: 1 }} />
             Full Post
