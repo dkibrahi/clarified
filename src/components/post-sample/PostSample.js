@@ -1,19 +1,45 @@
 // react imports
-import { Card, CardContent, Fab } from '@mui/material';
-import VisibilityIcon from '@mui/icons-material/Visibility';
+import { projFirestore } from '../../firebase/config';
 import { Link } from 'react-router-dom';
 
-// styles 
-import styles from './PostSample.module.css';
+// icons
+import { Card, CardContent, Fab } from '@mui/material';
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
 // components
 import MoreOptions from '../more-options/MoreOptions';
 
+// styles 
+import styles from './PostSample.module.css';
+
+
 
 export default function PostSample({ post }) {
+  const handleDelete = () => {
+    projFirestore.collection('posts').doc(post.id).delete();
+  }
+
+  const handleFlag = async (flagDescription) => {
+    const doc = { postID: post.id, reportedBy: "dkibrahi", flagDescription };
+
+    try {
+      await projFirestore.collection('reports').add(doc);
+    } catch(err) {
+      console.log(err);
+    }
+  }
+
   return (
     <Card variant="outlined" className={styles.card}>
-        <MoreOptions size="small" postID={post.id}/>
+        <MoreOptions 
+          size="small" 
+          postID={post.id}
+          handleDelete={handleDelete}
+          handleFlag={handleFlag}
+          displayEdit={true}
+          displayDelete={true}
+          displayFlag={true}
+        />
         <h3>{post.title}</h3>
         <p>{post.time}</p>
         <CardContent>
