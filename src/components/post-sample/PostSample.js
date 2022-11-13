@@ -1,6 +1,6 @@
 // react imports
 import { projFirestore } from '../../firebase/config';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 // icons
 import { Card, CardContent, Fab } from '@mui/material';
@@ -15,18 +15,20 @@ import styles from './PostSample.module.css';
 
 
 export default function PostSample({ post }) {
-  const handleDelete = () => {
-    projFirestore.collection('posts').doc(post.id).delete();
+  const history = useHistory();
+
+  const handleDelete = async () => {
+    await projFirestore.collection('posts').doc(post.id).delete();
   }
 
-  const handleFlag = async (flagDescription) => {
-    const doc = { postID: post.id, reportedBy: "dkibrahi", flagDescription };
-
-    try {
-      await projFirestore.collection('reports').add(doc);
-    } catch(err) {
-      console.log(err);
-    }
+  const handleEdit = () => {
+    history.push({
+      pathname: `/posts/${post.id}`,
+      state: { 
+        postID: post.id,
+        edit: true
+      }
+    }); 
   }
 
   return (
@@ -35,17 +37,23 @@ export default function PostSample({ post }) {
           size="small" 
           postID={post.id}
           handleDelete={handleDelete}
-          handleFlag={handleFlag}
+          handleEdit={handleEdit}
           displayEdit={true}
           displayDelete={true}
-          displayFlag={true}
+          displayFlag={false}
         />
         <h3>{post.title}</h3>
         <p>{post.time}</p>
         <CardContent>
-        <div>{post.content.substring(0, 100)}...</div>
+          <div>{post.content.substring(0, 100)}</div>
         </CardContent>
-        <Link to={`/posts/${post.id}`}>
+        <Link to={{
+            pathname: `/posts/${post.id}`,
+            state: { 
+              postID: post.id,
+              edit: false
+            }
+          }}>
         <Fab variant="extended" size="small">
             <VisibilityIcon sx={{ mr: 1 }} />
             Full Post

@@ -9,6 +9,7 @@ import AddStudent from './pages/add-student/AddStudent';
 import Error from './pages/error/Error';
 import Home from './pages/home/Home';
 import Login from './pages/login/Login';
+import ViewPost from './pages/view-post/ViewPost';
 // import Signup from './pages/signup/Signup';
 
 function App() {
@@ -22,7 +23,7 @@ function App() {
           <Route exact path={'/home'} component={Home}/>
           <Route path={'/create'} component={CreatePost}/>
           <Route path={'/addstudent'} component={AddStudent}/>
-          <Route path='/posts/:id' component={SinglePost}/>
+          <Route path='/posts/:id' component={ViewPost}/>
           <Route path={'*'} component={Error}/>
         </Switch>
       </BrowserRouter>
