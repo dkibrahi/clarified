@@ -25,7 +25,7 @@ export default function PostSample({ post }) {
     history.push({
       pathname: `/posts/${post.id}`,
       state: { 
-        post: post,
+        postID: post.id,
         edit: true
       }
     }); 
@@ -49,7 +49,10 @@ export default function PostSample({ post }) {
         </CardContent>
         <Link to={{
             pathname: `/posts/${post.id}`,
-            state: { post: post}
+            state: { 
+              postID: post.id,
+              edit: false
+            }
           }}>
         <Fab variant="extended" size="small">
             <VisibilityIcon sx={{ mr: 1 }} />

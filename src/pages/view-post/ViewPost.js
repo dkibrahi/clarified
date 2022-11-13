@@ -2,7 +2,7 @@
 import { projFirestore } from '../../firebase/config';
 import {useLocation} from "react-router-dom";
 import { useHistory } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // icons
 import { Card, CardContent, TextField } from '@mui/material';
@@ -15,16 +15,47 @@ import MoreOptions from '../../components/more-options/MoreOptions';
 
 // styles 
 import styles from './ViewPost.module.css';
+import Loading from '../../components/loading-screen/Loading';
 
 export default function ViewPost() {
     const history = useHistory();
 
     const data = useLocation();
-    const post = data.state.post;
+    const postID = data.state.postID;
 
     const [isEditing, setIsEditing] = useState(data.state.edit);
     const [newTitle, setNewTitle] = useState('');
     const [newContent, setNewContent] = useState('');
+
+    const [post, setPost] = useState(null);
+    const [isPending, setIsPending] = useState(false);
+    const [error, setError] = useState(null);
+
+  useEffect(() => {
+    setIsPending(true);
+    
+    const unsub = projFirestore.collection('posts').doc(postID).onSnapshot(snapshot => {
+      if (snapshot.empty) {
+        setError("Post was not found");
+        setIsPending(false);
+      }
+
+      else {
+        let result = {id: postID, ...snapshot.data()};
+
+        setPost(result);
+        setNewTitle(result.title);
+        setNewContent(result.content);
+        setIsPending(false);
+      }
+    
+    }, (err) => {
+        setError(err.message);
+        setIsPending(false);
+      });
+
+    return () => unsub();
+  }, [isEditing, postID]);
 
     const handleDelete = () => {
         projFirestore.collection('posts').doc(post.id).delete();
@@ -46,69 +77,75 @@ export default function ViewPost() {
 
 
     return (
-        <Card variant="outlined" className={styles.card}>
-            <MoreOptions 
-                size="small" 
-                postID={post.id}
-                handleDelete={handleDelete}
-                handleEdit={handleEdit}
-                displayEdit={true}
-                displayDelete={true}
-                displayFlag={false}
-            />
+        <>
+            {error && <p className='error'>{error}</p>}
+            {isPending && <Loading />}
 
-            {isEditing && 
-                <div className={styles.editPost}>
-                    <TextField
-                        required
-                        id="outlined-required"
-                        onChange={(e) => setNewTitle(e.target.value)}
-                        label="Title"
-                        defaultValue={post.title}
-                    />
-                    <TextField
-                        id="outlined-multiline-static"
-                        onChange={(e) => setNewContent(e.target.value)}
-                        label="Multiline"
-                        multiline
-                        rows={4}
-                        defaultValue={post.content}
-                    />
+            {post && 
+            <Card variant="outlined" className={styles.card}>
+                <MoreOptions 
+                    size="small" 
+                    postID={post.id}
+                    handleDelete={handleDelete}
+                    handleEdit={handleEdit}
+                    displayEdit={true}
+                    displayDelete={true}
+                    displayFlag={false}
+                />
 
-                    <div className={styles.editPostButtons}>
-                        <Button 
-                            variant="contained" 
-                            onClick={() => setIsEditing(false)}
-                            className={styles.cancelButton}>
-                            Cancel
-                        </Button>
-                        <Button 
-                            variant="contained" 
-                            onClick={handleSave}
-                            className={styles.saveButton}>
-                            Save
-                        </Button>
+                {isEditing && 
+                    <div className={styles.editPost}>
+                        <TextField
+                            required
+                            id="outlined-required"
+                            onChange={(e) => setNewTitle(e.target.value)}
+                            label="Title"
+                            defaultValue={post.title}
+                        />
+                        <TextField
+                            id="outlined-multiline-static"
+                            onChange={(e) => setNewContent(e.target.value)}
+                            label="Multiline"
+                            multiline
+                            rows={4}
+                            defaultValue={post.content}
+                        />
+
+                        <div className={styles.editPostButtons}>
+                            <Button 
+                                variant="contained" 
+                                onClick={() => setIsEditing(false)}
+                                className={styles.cancelButton}>
+                                Cancel
+                            </Button>
+                            <Button 
+                                variant="contained" 
+                                onClick={handleSave}
+                                className={styles.saveButton}>
+                                Save
+                            </Button>
+                        </div>
                     </div>
-                </div>
-            }
+                }
 
-            {!isEditing && 
-                <>
-                    <div className={styles.defaultPost}>
-                        <h3>{post.title}</h3>
-                        <p>{post.time}</p>
-                        <CardContent>
-                            <div>{post.content}</div>
-                        </CardContent>
-                        <Divider />
-                    </div>
-                    <Button size="small" variant="contained">
-                        <ReplyIcon/>
-                        <span>Reply</span>
-                    </Button>
-                </>
-            }
-
-        </Card>
+                {!isEditing && 
+                    <>
+                        <div className={styles.defaultPost}>
+                            <h3>{post.title}</h3>
+                            <p>{post.time}</p>
+                            <CardContent>
+                                <div>{post.content}</div>
+                            </CardContent>
+                            <Divider />
+                        </div>
+                        <Button size="small" variant="contained">
+                            <ReplyIcon/>
+                            <span>Reply</span>
+                        </Button>
+                    </>
+                }
+            </Card>
+       }
+       </>
     )
 }
