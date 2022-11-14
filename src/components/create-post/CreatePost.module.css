@@ -1,39 +1,18 @@
-.create-post {
-    box-shadow: none;
-    overflow: auto;
-}
-
-.create-post img {
-    width: 10%;
-    background-color: #F2F2F2;
-    border-radius: 50%; 
-}
-
-.create-post button {
-    border-radius: 1em;
-    float: right;
-    border-color: #000080;
-    color: #000080;
-}
-
-.create-post button:hover {
-    background-color: #000080;
-}
-
-.create-post input {
-    width: 75%;
-    background-color: #F2F2F2;
-    border-radius: 1em;
-    text-indent: 1em;
-}
-
-.create-post .main-input {
-    white-space: nowrap;
-    overflow-x: auto;
+.editPost {
     display: flex;
-    justify-content: space-evenly;
+    flex-direction: column;
+    margin-bottom: 1em;
 }
 
-.create-post .main-input img, .create-post .main-input input {
-    vertical-align: middle;
+.editPost {
+    gap: 1em;
+}
+
+.editPost .editPostButtons {
+    flex-direction: row;
+}
+
+.editPost .saveButton {
+    margin-left: 1em;
+    margin-right: 1em;
 }

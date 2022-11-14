@@ -20,12 +20,3 @@
 .card .editPost {
     gap: 1em;
 }
-
-.card .editPostButtons {
-    flex-direction: row;
-}
-
-.card .saveButton {
-    margin-left: 1em;
-    margin-right: 1em;
-}
