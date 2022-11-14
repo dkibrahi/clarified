@@ -32,7 +32,7 @@ export default function AdminCreate() {
     }
 
     const handleSave = async () => {
-        const today = new Date().toISOString().slice(0, 10);
+        const today = new Date().toISOString().slice(0, 10);        
 
         const doc = { 
             author: 'placeholder',
