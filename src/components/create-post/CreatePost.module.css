@@ -1,28 +1,27 @@
 .create-post {
-    box-shadow: none;
+    box-shadow: darkblue;
     overflow: auto;
 }
 
-.create-post img {
-    width: 10%;
-    background-color: #F2F2F2;
-    border-radius: 50%; 
+.create-post author {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: rgb(184, 11, 252);
 }
-
-.create-post button {
+.create-post Button {
     border-radius: 1em;
-    float: right;
-    border-color: #000080;
-    color: #000080;
+    float: bottom;
+    border-color: #fc1515;
+    color: #f50e57;
 }
 
 .create-post button:hover {
-    background-color: #000080;
+    background-color: #0cec35;
 }
 
 .create-post input {
     width: 75%;
-    background-color: #F2F2F2;
+    background-color: #ef08ff;
     border-radius: 1em;
     text-indent: 1em;
 }
@@ -34,6 +33,7 @@
     justify-content: space-evenly;
 }
 
-.create-post .main-input img, .create-post .main-input input {
+.create-post .main-input , .create-post .main-input input {
     vertical-align: middle;
+   
 }
