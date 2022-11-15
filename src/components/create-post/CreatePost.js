@@ -1,27 +1,37 @@
-// react imports
-import { useState } from 'react';
-
-// images
-import defaultProfileMale from '../../images/default-profile-male.png';
+// icons
+import { TextField } from '@mui/material';
+import Button from '@mui/material/Button';
 
 // styles
 import styles from './CreatePost.module.css';
 
-export default function CreatePost() {
-    const [post, setPost] = useState('');
-
+export default function CreatePost(props) {
     return (
-        <form className={styles["create-post"]}>
-            <label className={styles["main-input"]}>
-                <img src={defaultProfileMale} alt='default male profile'/>
-                <input 
-                    type='text'
-                    onChange={(e) => setPost(e.target.value)}
-                    value={post}
-                    placeholder="Enter your thoughts..."
-                />
-            </label>
-            <button className='btn'>Post</button>
-        </form>
+        <div className={styles.editPost}>
+            {props.children}
+            <TextField
+                id="outlined-multiline-static"
+                onChange={(e) => props.setNewContent(e.target.value)}
+                label="Multiline"
+                multiline
+                rows={4}
+                defaultValue={props.post.content}
+            />
+
+            <div className={styles.editPostButtons}>
+                <Button 
+                    variant="contained" 
+                    onClick={() => props.setView(false)}
+                    className={styles.cancelButton}>
+                    Cancel
+                </Button>
+                <Button 
+                    variant="contained" 
+                    onClick={props.handleSave}
+                    className={styles.saveButton}>
+                    Save
+                </Button>
+            </div>
+        </div>
   )
 }

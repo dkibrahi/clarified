@@ -12,6 +12,7 @@ import Divider from '@mui/material/Divider';
 
 // components
 import MoreOptions from '../../components/more-options/MoreOptions';
+import CreatePost from '../../components/create-post/CreatePost';
 
 // styles 
 import styles from './ViewPost.module.css';
@@ -31,31 +32,31 @@ export default function ViewPost() {
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState(null);
 
-  useEffect(() => {
-    setIsPending(true);
-    
-    const unsub = projFirestore.collection('posts').doc(postID).onSnapshot(snapshot => {
-      if (snapshot.empty) {
-        setError("Post was not found");
-        setIsPending(false);
-      }
+    useEffect(() => {
+        setIsPending(true);
+        
+        const unsub = projFirestore.collection('posts').doc(postID).onSnapshot(snapshot => {
+            if (snapshot.empty) {
+                setError("Post was not found");
+                setIsPending(false);
+            }
 
-      else {
-        let result = {id: postID, ...snapshot.data()};
+            else {
+                let result = {id: postID, ...snapshot.data()};
 
-        setPost(result);
-        setNewTitle(result.title);
-        setNewContent(result.content);
-        setIsPending(false);
-      }
-    
-    }, (err) => {
-        setError(err.message);
-        setIsPending(false);
-      });
+                setPost(result);
+                setNewTitle(result.title);
+                setNewContent(result.content);
+                setIsPending(false);
+            }
+        
+        }, (err) => {
+            setError(err.message);
+            setIsPending(false);
+        });
 
-    return () => unsub();
-  }, [isEditing, postID]);
+        return () => unsub();
+    }, [isEditing, postID]);
 
     const handleDelete = () => {
         projFirestore.collection('posts').doc(post.id).delete();
@@ -94,45 +95,25 @@ export default function ViewPost() {
                 />
 
                 {isEditing && 
-                    <div className={styles.editPost}>
+                    <CreatePost
+                        post={post}
+                        setNewContent={setNewContent}
+                        setView={setIsEditing}
+                        handleSave={handleSave}>
                         <TextField
                             required
                             id="outlined-required"
                             onChange={(e) => setNewTitle(e.target.value)}
                             label="Title"
-                            defaultValue={post.title}
-                        />
-                        <TextField
-                            id="outlined-multiline-static"
-                            onChange={(e) => setNewContent(e.target.value)}
-                            label="Multiline"
-                            multiline
-                            rows={4}
-                            defaultValue={post.content}
-                        />
-
-                        <div className={styles.editPostButtons}>
-                            <Button 
-                                variant="contained" 
-                                onClick={() => setIsEditing(false)}
-                                className={styles.cancelButton}>
-                                Cancel
-                            </Button>
-                            <Button 
-                                variant="contained" 
-                                onClick={handleSave}
-                                className={styles.saveButton}>
-                                Save
-                            </Button>
-                        </div>
-                    </div>
+                            defaultValue={post.title}/>
+                    </CreatePost>
                 }
 
                 {!isEditing && 
                     <>
                         <div className={styles.defaultPost}>
                             <h3>{post.title}</h3>
-                            <p>{post.time}</p>
+                            <p>{post.date}</p>
                             <CardContent>
                                 <div>{post.content}</div>
                             </CardContent>

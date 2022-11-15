@@ -43,7 +43,7 @@ export default function PostSample({ post }) {
           displayFlag={false}
         />
         <h3>{post.title}</h3>
-        <p>{post.time}</p>
+        <p>{post.date}</p>
         <CardContent>
           <div>{post.content.substring(0, 100)}</div>
         </CardContent>
