@@ -24,7 +24,7 @@ function App() {
           <Route exact path={'/home'} component={Home}/>
           <Route path={'/create'} component={AdminCreate}/>
           <Route path={'/addstudent'} component={AddStudent}/>
-          <Route path='/posts/:id' component={ViewPost}/>
+          <Route path='/posts/:titleLink' component={ViewPost}/>
           <Route path={'*'} component={Error}/>
         </Switch>
       </BrowserRouter>

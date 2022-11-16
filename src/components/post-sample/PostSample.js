@@ -16,6 +16,8 @@ import styles from './PostSample.module.css';
 
 export default function PostSample({ post }) {
   const history = useHistory();
+  const linkTitle = post.title.replace(/\ /g,'-');
+  const postDate = post.date.toDate().toDateString(); 
 
   const handleDelete = async () => {
     await projFirestore.collection('posts').doc(post.id).delete();
@@ -23,11 +25,8 @@ export default function PostSample({ post }) {
 
   const handleEdit = () => {
     history.push({
-      pathname: `/posts/${post.id}`,
-      state: { 
-        postID: post.id,
-        edit: true
-      }
+      pathname: `/posts/${linkTitle}`,
+      state: {edit: true}
     }); 
   }
 
@@ -43,16 +42,13 @@ export default function PostSample({ post }) {
           displayFlag={false}
         />
         <h3>{post.title}</h3>
-        <p>{post.date}</p>
+        <p>{postDate}</p>
         <CardContent>
           <div>{post.content.substring(0, 100)}</div>
         </CardContent>
         <Link to={{
-            pathname: `/posts/${post.id}`,
-            state: { 
-              postID: post.id,
-              edit: false
-            }
+            pathname: `/posts/${linkTitle}`,
+            state: {edit: false}
           }}>
         <Fab variant="extended" size="small">
             <VisibilityIcon sx={{ mr: 1 }} />

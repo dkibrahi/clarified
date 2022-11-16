@@ -3,6 +3,7 @@ import { projFirestore } from '../../firebase/config';
 import {useLocation} from "react-router-dom";
 import { useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 
 // icons
 import { Card, CardContent, TextField } from '@mui/material';
@@ -22,18 +23,29 @@ export default function ViewPost() {
     const history = useHistory();
 
     const data = useLocation();
-    const postID = data.state.postID;
+
+    let { titleLink } = useParams();
 
     const [isEditing, setIsEditing] = useState(data.state.edit);
     const [newTitle, setNewTitle] = useState('');
     const [newContent, setNewContent] = useState('');
+    const [postDate, setPostDate] = useState(null);
 
     const [post, setPost] = useState(null);
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState(null);
 
+    const [postID, setPostID] = useState('');
+
+   
     useEffect(() => {
         setIsPending(true);
+
+        grabPostID();
+
+        if (postID.length == 0) {
+            return;
+        }
         
         const unsub = projFirestore.collection('posts').doc(postID).onSnapshot(snapshot => {
             if (snapshot.empty) {
@@ -42,8 +54,10 @@ export default function ViewPost() {
             }
 
             else {
+                console.log("here?");
                 let result = {id: postID, ...snapshot.data()};
-
+                
+                setPostDate(result.date.toDate().toDateString()); 
                 setPost(result);
                 setNewTitle(result.title);
                 setNewContent(result.content);
@@ -57,6 +71,26 @@ export default function ViewPost() {
 
         return () => unsub();
     }, [isEditing, postID]);
+
+    const grabPostID = () => {
+        titleLink = titleLink.replace(/\-/g,'');
+        titleLink = titleLink.toLowerCase();
+
+        projFirestore.collection('titles').doc(titleLink).onSnapshot(snapshot => {
+            if (snapshot.empty) {
+                setError("Post was not found");
+                setIsPending(false);
+            }
+
+            else {
+                setPostID(snapshot.data().postID);
+            }
+
+        }, (err) => {
+            setError(err.message);
+            setIsPending(false);
+        });
+    }
 
     const handleDelete = () => {
         projFirestore.collection('posts').doc(post.id).delete();
@@ -113,7 +147,7 @@ export default function ViewPost() {
                     <>
                         <div className={styles.defaultPost}>
                             <h3>{post.title}</h3>
-                            <p>{post.date}</p>
+                            <p>{postDate}</p>
                             <CardContent>
                                 <div>{post.content}</div>
                             </CardContent>

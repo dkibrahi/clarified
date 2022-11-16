@@ -8,7 +8,6 @@ import styles from './Home.module.css';
 // components
 import UserPosts from '../../components/user-posts/UserPosts';
 import Loading from '../../components/loading-screen/Loading';
-import AlertUser from '../../components/alert-user/AlertUser';
 
 
 export default function Home() {
@@ -19,7 +18,7 @@ export default function Home() {
   useEffect(() => {
     setIsPending(true);
 
-    const unsub = projFirestore.collection('posts').onSnapshot(snapshot => {
+    const unsub = projFirestore.collection('posts').orderBy('date').onSnapshot(snapshot => {
       if (snapshot.empty) {
         setError("No posts to load");
         setIsPending(false);
@@ -27,9 +26,12 @@ export default function Home() {
 
       else {
         let results = [];
+
         snapshot.docs.forEach(doc => {
           results.push( { id: doc.id, ...doc.data() });
         })
+
+        results.reverse();
 
         setPosts(results);
         setIsPending(false);
