@@ -26,7 +26,7 @@ export default function ViewPost() {
 
     let { titleLink } = useParams();
 
-    const [isEditing, setIsEditing] = useState(data.state.edit);
+    const [isEditing, setIsEditing] = useState(false);
     const [newTitle, setNewTitle] = useState('');
     const [newContent, setNewContent] = useState('');
     const [postDate, setPostDate] = useState(null);
@@ -36,6 +36,12 @@ export default function ViewPost() {
     const [error, setError] = useState(null);
 
     const [postID, setPostID] = useState('');
+
+    useEffect(() => {
+        if (data.state && 'edit' in data.state && data.state.edit) {
+            setIsEditing(true);
+        }
+    }, []);
 
    
     useEffect(() => {
@@ -54,7 +60,6 @@ export default function ViewPost() {
             }
 
             else {
-                console.log("here?");
                 let result = {id: postID, ...snapshot.data()};
                 
                 setPostDate(result.date.toDate().toDateString()); 

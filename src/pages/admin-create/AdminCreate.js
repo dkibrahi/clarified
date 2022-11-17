@@ -79,9 +79,22 @@ export default function AdminCreate() {
             return false;
         }
 
-        // unique check
+        let titleLink = newTitle.replace(/\ /g,'');
+        titleLink = titleLink.toLowerCase();
 
-        return true;
+        setNewTitle(titleLink);
+
+        projFirestore.collection('titles').doc(newTitle).onSnapshot(snapshot => {
+            if (!snapshot.empty) {
+                setFeedbackDesc('A post with that tile already exists. Please choose a new title!');
+            }
+
+            return snapshot.empty; // want to see if title already exists
+
+        }, (err) => {
+            return false;
+        });
+
     }
 
     const handleChange = (e) => {
