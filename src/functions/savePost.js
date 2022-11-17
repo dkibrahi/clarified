@@ -4,7 +4,8 @@ import { useHistory } from 'react-router-dom';
 
 const savePost = async (setFeedbackType, setFeedbackTitle, setShowFeedback, setFeedbackDesc, title, content, history, isValid) => {
     if (!isValid) {
-        alert("reached");
+        console.log(isValid);
+        alert("reached saved post and not valid");
         setFeedbackType('error');
         setFeedbackTitle('Error Creating Post');
         setShowFeedback(true);
@@ -19,7 +20,6 @@ const savePost = async (setFeedbackType, setFeedbackTitle, setShowFeedback, setF
     };
 
     try {
-        alert("we reached it....finally!!!!!");
         const firebaseObj = await projFirestore.collection('posts').add(doc);
         const postID = firebaseObj.id;
 
@@ -35,7 +35,7 @@ const savePost = async (setFeedbackType, setFeedbackTitle, setShowFeedback, setF
         titleLink = title.replace(/\ /g,'-');
         titleLink = titleLink.replace(/[^a-zA-Z-]/g, "");
         titleLink = titleLink.toLowerCase();
-        setTimeout(() => history.push(`/posts/${titleLink}`), 3000);
+        setTimeout(() => history.push(`/posts/${titleLink}`), 2500);
     } catch(err) {
         setFeedbackType('error');
         setFeedbackTitle('Error Creating Post');

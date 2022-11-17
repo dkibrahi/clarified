@@ -2,7 +2,7 @@
 import { projFirestore } from '../../firebase/config';
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import isValid from '../../functions/isValid';
+import validTitle from '../../functions/isValid';
 import savePost from '../../functions/savePost';
 
 // icons
@@ -24,6 +24,7 @@ export default function AdminCreate() {
     const [feedbackType, setFeedbackType] = useState('');
     const [feedbackTitle, setFeedbackTitle] = useState('');
     const [feedbackDesc, setFeedbackDesc] = useState('');
+
     const [valid, setValid] = useState(null); // for save feature
 
     const [post, setPost] = useState({title: '', content: ''});
@@ -36,13 +37,17 @@ export default function AdminCreate() {
     }
 
     const handleSave = async () => {
-        isValid(newTitle, setFeedbackDesc, setValid);
+        await validTitle(newTitle, setFeedbackDesc, setValid);
     }
 
     useEffect(() => {
+        const ac = new AbortController();
+
         if (valid !== null && typeof valid !== 'undefined') {
             savePost(setFeedbackType, setFeedbackTitle, setShowFeedback, setFeedbackDesc, newTitle, newContent, history, valid);
         }
+
+        return () => ac.abort();
     }, [valid]);
 
     const handleChange = (e) => {

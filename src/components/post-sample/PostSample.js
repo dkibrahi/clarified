@@ -20,7 +20,13 @@ export default function PostSample({ post }) {
   const postDate = post.date.toDate().toDateString(); 
 
   const handleDelete = async () => {
+    let titleInDB = post.title.replace(/[^a-zA-Z-]/g, "");
+    titleInDB = titleInDB.toLowerCase();
+
     await projFirestore.collection('posts').doc(post.id).delete();
+    await projFirestore.collection('titles').doc(titleInDB).delete();
+
+    window.location.reload();
   }
 
   const handleEdit = () => {
