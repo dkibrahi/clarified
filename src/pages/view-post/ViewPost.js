@@ -4,6 +4,8 @@ import {useLocation} from "react-router-dom";
 import { useHistory } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import isValid from '../../functions/isValid';
+import savePost from '../../functions/savePost';
 
 // icons
 import { Card, CardContent, TextField } from '@mui/material';
@@ -14,6 +16,7 @@ import Divider from '@mui/material/Divider';
 // components
 import MoreOptions from '../../components/more-options/MoreOptions';
 import CreatePost from '../../components/create-post/CreatePost';
+import AlertUser from '../../components/alert-user/AlertUser';
 
 // styles 
 import styles from './ViewPost.module.css';
@@ -34,6 +37,12 @@ export default function ViewPost() {
     const [post, setPost] = useState(null);
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState(null);
+
+    const [showFeedback, setShowFeedback] = useState(false); // if user alert should be shown
+    const [feedbackType, setFeedbackType] = useState('');
+    const [feedbackTitle, setFeedbackTitle] = useState('');
+    const [feedbackDesc, setFeedbackDesc] = useState('');
+    const [valid, setValid] = useState(null); // for save feature
 
     const [postID, setPostID] = useState('');
 
@@ -105,16 +114,25 @@ export default function ViewPost() {
     const handleEdit = () => {
         setIsEditing(true);
     }
-    
+
     const handleSave = async () => {
-        await projFirestore.collection('posts').doc(post.id).update({
-            title: newTitle,    
-            content: newContent
-        });
-        
-        setIsEditing(false);
+        if (post.title === newTitle) {
+            setIsEditing(false);
+            return;
+        }
+
+        isValid(newTitle, setFeedbackDesc, setValid);
     }
 
+    useEffect(() => {
+        if (valid !== null && typeof valid !== 'undefined') {
+            savePost(setFeedbackType, setFeedbackTitle, setShowFeedback, setFeedbackDesc, newTitle, newContent, history, valid);
+        }
+
+         setIsEditing(false);
+
+    }, [valid]);
+    
 
     return (
         <>
@@ -164,8 +182,16 @@ export default function ViewPost() {
                         </Button>
                     </>
                 }
+
+                {showFeedback && <AlertUser 
+                    display={showFeedback}
+                    severity={feedbackType}
+                    title={feedbackTitle}
+                    description={feedbackDesc}/>
+                }
             </Card>
-       }
+        }
+
        </>
     )
 }

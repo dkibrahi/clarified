@@ -1,7 +1,9 @@
 // react imports
 import { projFirestore } from '../../firebase/config';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import isValid from '../../functions/isValid';
+import savePost from '../../functions/savePost';
 
 // icons
 import { Card, TextField } from '@mui/material';
@@ -22,6 +24,7 @@ export default function AdminCreate() {
     const [feedbackType, setFeedbackType] = useState('');
     const [feedbackTitle, setFeedbackTitle] = useState('');
     const [feedbackDesc, setFeedbackDesc] = useState('');
+    const [valid, setValid] = useState(null); // for save feature
 
     const [post, setPost] = useState({title: '', content: ''});
 
@@ -33,69 +36,14 @@ export default function AdminCreate() {
     }
 
     const handleSave = async () => {
-        if (!validTitle()) {
-            setShowFeedback(true);
-            setFeedbackType('error');
-            setFeedbackTitle('Error Creating Post');
-            return;
-        } 
-
-        const today = new Date().toISOString().slice(0, 10);   
-
-        const doc = { 
-            author: 'placeholder',
-            title: newTitle,
-            content: newContent,
-            date: new Date()
-        };
-
-        try {
-            await projFirestore.collection('posts').add(doc);
-            setShowFeedback(true);
-            setFeedbackType('success');
-            setFeedbackTitle('Post Created');
-            setFeedbackDesc('Post was created! Users will be able to reply in just a moment...');
-
-            //  history.push('/home');
-            // history.push(`/posts${newTitle}`); will send user to their post eventually
-        } catch(err) {
-            setShowFeedback(true);
-            setFeedbackType('error');
-            setFeedbackTitle('Error Creating Post');
-            setFeedbackDesc('The post could not be created. This is an error on our end. Please try again later');
-            console.log(err);
-        }
-
+        isValid(newTitle, setFeedbackDesc, setValid);
     }
 
-    const validTitle = () => {
-        if (newTitle.length == 0) {
-            setFeedbackDesc('Please enter a title for the post');
-            return false;
+    useEffect(() => {
+        if (valid !== null && typeof valid !== 'undefined') {
+            savePost(setFeedbackType, setFeedbackTitle, setShowFeedback, setFeedbackDesc, newTitle, newContent, history, valid);
         }
-
-        if (newTitle.length >= 40) {
-            setFeedbackDesc('Please shorten the length of the post to under 40 characters');
-            return false;
-        }
-
-        let titleLink = newTitle.replace(/\ /g,'');
-        titleLink = titleLink.toLowerCase();
-
-        setNewTitle(titleLink);
-
-        projFirestore.collection('titles').doc(newTitle).onSnapshot(snapshot => {
-            if (!snapshot.empty) {
-                setFeedbackDesc('A post with that tile already exists. Please choose a new title!');
-            }
-
-            return snapshot.empty; // want to see if title already exists
-
-        }, (err) => {
-            return false;
-        });
-
-    }
+    }, [valid]);
 
     const handleChange = (e) => {
         setNewTitle(e.target.value);
