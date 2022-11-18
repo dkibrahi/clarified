@@ -27,7 +27,7 @@ export default function AdminCreate() {
 
     const [valid, setValid] = useState(null); // for save feature
 
-    const [post, setPost] = useState({title: '', content: ''});
+    let post = {title: '', content: ''};
 
 
     const handleCancel = () => {
@@ -47,7 +47,7 @@ export default function AdminCreate() {
 
         if (valid !== null && typeof valid !== 'undefined') {
             console.log("reached");
-            savePost(setFeedbackType, setFeedbackTitle, setShowFeedback, setFeedbackDesc, newTitle, newContent, history, valid).then(res => {
+            savePost(setFeedbackType, setFeedbackTitle, setFeedbackDesc, newTitle, newContent, history, valid).then(res => {
                 setShowFeedback(true);
                 console.log(showFeedback);
             })
