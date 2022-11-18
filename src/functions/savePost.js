@@ -1,7 +1,7 @@
 // react imports
 import { projFirestore } from '../firebase/config';
 
-const savePost = async (setFeedbackType, setFeedbackTitle, setShowFeedback, setFeedbackDesc, title, content, history, isValid) => {
+const savePost = async (setFeedbackType, setFeedbackTitle, setFeedbackDesc, title, content, history, isValid) => {
     if (!isValid) {
         setFeedbackType('error');
         setFeedbackTitle('Error Creating Post');
@@ -27,7 +27,7 @@ const savePost = async (setFeedbackType, setFeedbackTitle, setShowFeedback, setF
         setFeedbackTitle('Post Created');
         setFeedbackDesc('Post saved! Do NOT refresh. Users will be able to reply in just a moment...');
 
-        titleLink = title.replace(/\ /g,'-');
+        titleLink = title.replace(/ /g,'-');
         titleLink = titleLink.replace(/[^a-zA-Z-]/g, "");
         titleLink = titleLink.toLowerCase();
         setTimeout(() => history.push(`/posts/${titleLink}`), 2500);

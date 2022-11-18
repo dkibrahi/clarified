@@ -5,9 +5,6 @@ import { projFirestore } from '../../firebase/config';
 import Particle from '../../components/Particle/Particle';
 import Form from '../../components/Form/Form';
 
-// styles
-import styles from './AddStudent.module.css';
-
 export default function AddStudent() {
     const handleSubmit = async (uniqname) => {
         if (!uniqname || !validInput(uniqname)) {

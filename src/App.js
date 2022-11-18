@@ -1,6 +1,5 @@
 // react imports
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
-import CreatePost from './components/create-post/CreatePost';
 
 // components
 import Navbar from './components/navbar/Navbar';
