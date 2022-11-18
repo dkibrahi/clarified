@@ -6,3 +6,9 @@
 .card .options {
     float: right;
 }
+
+.card footer {
+    display: flex;
+    flex-direction: row;
+    gap: 1em;
+}

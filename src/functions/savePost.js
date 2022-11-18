@@ -12,6 +12,7 @@ const savePost = async (setFeedbackType, setFeedbackTitle, setShowFeedback, setF
         author: 'placeholder',
         title: title,
         content: content,
+        numReplies: 0,
         date: new Date()
     };
 

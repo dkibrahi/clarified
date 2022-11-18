@@ -11,6 +11,7 @@ import MoreOptions from '../more-options/MoreOptions';
 
 // styles 
 import styles from './PostSample.module.css';
+import PostRatings from '../post-ratings/PostRatings';
 
 
 
@@ -50,15 +51,18 @@ export default function PostSample({ post }) {
         <CardContent>
           <div>{post.content.substring(0, 100)}</div>
         </CardContent>
-        <Link to={{
+
+        <footer>
+          <Link to={{
             pathname: `/posts/${linkTitle}`,
-            state: {edit: false}
-          }}>
-        <Fab variant="extended" size="small">
-            <VisibilityIcon sx={{ mr: 1 }} />
-            Full Post
-        </Fab>
-        </Link>
+            state: {edit: false}}}>
+              <Fab variant="extended" size="small">
+                <VisibilityIcon sx={{ mr: 1 }} />
+                Full Post
+              </Fab>
+          </Link>
+         <PostRatings numReplies={post.numReplies}/>
+        </footer>
     </Card>
   )
 }

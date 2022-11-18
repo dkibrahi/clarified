@@ -46,10 +46,8 @@ export default function AdminCreate() {
         const ac = new AbortController();
 
         if (valid !== null && typeof valid !== 'undefined') {
-            console.log("reached");
             savePost(setFeedbackType, setFeedbackTitle, setShowFeedback, setFeedbackDesc, newTitle, newContent, history, valid).then(res => {
                 setShowFeedback(true);
-                console.log(showFeedback);
             })
         }
 
