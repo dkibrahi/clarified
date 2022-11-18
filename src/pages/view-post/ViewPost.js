@@ -1,11 +1,10 @@
 // react imports
 import { projFirestore } from '../../firebase/config';
-import {useLocation} from "react-router-dom";
-import { useHistory } from 'react-router-dom';
+import { useLocation, useHistory, useParams } from "react-router-dom";
 import { useState, useEffect } from 'react';
 
 // icons
-import { Card, CardContent, TextField } from '@mui/material';
+import { Card, CardContent } from '@mui/material';
 import ReplyIcon from '@mui/icons-material/Reply';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
@@ -22,20 +21,39 @@ export default function ViewPost() {
     const history = useHistory();
 
     const data = useLocation();
-    const postID = data.state.postID;
 
-    const [isEditing, setIsEditing] = useState(data.state.edit);
-    const [newTitle, setNewTitle] = useState('');
+    let { titleLink } = useParams();
+
+    const [isEditing, setIsEditing] = useState(false);
     const [newContent, setNewContent] = useState('');
+    const [postDate, setPostDate] = useState(null);
 
     const [post, setPost] = useState(null);
     const [isPending, setIsPending] = useState(false);
     const [error, setError] = useState(null);
 
+    const [postID, setPostID] = useState('');
+
     useEffect(() => {
+        if (data.state && 'edit' in data.state && data.state.edit) {
+            setIsEditing(true);
+        }
+    }, []);
+
+   
+    useEffect(() => {
+        const ac = new AbortController();
+
         setIsPending(true);
+
+        grabPostID();
+
+        if (postID.length === 0) {
+            return;
+        }
         
-        const unsub = projFirestore.collection('posts').doc(postID).onSnapshot(snapshot => {
+        
+        projFirestore.collection('posts').doc(postID).get().then(snapshot => {
             if (snapshot.empty) {
                 setError("Post was not found");
                 setIsPending(false);
@@ -43,9 +61,9 @@ export default function ViewPost() {
 
             else {
                 let result = {id: postID, ...snapshot.data()};
-
+                
+                setPostDate(result.date.toDate().toDateString()); 
                 setPost(result);
-                setNewTitle(result.title);
                 setNewContent(result.content);
                 setIsPending(false);
             }
@@ -55,11 +73,35 @@ export default function ViewPost() {
             setIsPending(false);
         });
 
-        return () => unsub();
+        return () => ac.abort();
     }, [isEditing, postID]);
 
-    const handleDelete = () => {
-        projFirestore.collection('posts').doc(post.id).delete();
+    const grabPostID = () => {
+        titleLink = titleLink.replace(/\-/g,'');
+        titleLink = titleLink.toLowerCase();
+
+        projFirestore.collection('titles').doc(titleLink).get().then(res => {
+            if (res.empty) {
+                setError("Post was not found");
+                setIsPending(false);
+            }
+
+            else {
+                setPostID(res.data().postID);
+            }
+
+        }, (err) => {
+            setError(err.message);
+            setIsPending(false);
+        });
+    }
+
+    const handleDelete = async () => {
+        let titleInDB = post.title.replace(/[^a-zA-Z-]/g, "");
+        titleInDB = titleInDB.toLowerCase();
+
+        await projFirestore.collection('titles').doc(titleInDB).delete();
+        await projFirestore.collection('posts').doc(post.id).delete();
         history.push('/home');
     }
 
@@ -68,8 +110,7 @@ export default function ViewPost() {
     }
     
     const handleSave = async () => {
-        await projFirestore.collection('posts').doc(post.id).update({
-            title: newTitle,    
+        await projFirestore.collection('posts').doc(post.id).update({    
             content: newContent
         });
         
@@ -100,12 +141,7 @@ export default function ViewPost() {
                         setNewContent={setNewContent}
                         setView={setIsEditing}
                         handleSave={handleSave}>
-                        <TextField
-                            required
-                            id="outlined-required"
-                            onChange={(e) => setNewTitle(e.target.value)}
-                            label="Title"
-                            defaultValue={post.title}/>
+                            <h3>{post.title}</h3>
                     </CreatePost>
                 }
 
@@ -113,7 +149,7 @@ export default function ViewPost() {
                     <>
                         <div className={styles.defaultPost}>
                             <h3>{post.title}</h3>
-                            <p>{post.date}</p>
+                            <p>{postDate}</p>
                             <CardContent>
                                 <div>{post.content}</div>
                             </CardContent>

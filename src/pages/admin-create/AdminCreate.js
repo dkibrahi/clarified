@@ -1,10 +1,13 @@
 // react imports
-import { projFirestore } from '../../firebase/config';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
+import validTitle from '../../functions/isValid';
+import savePost from '../../functions/savePost';
 
 // icons
-import { Alert, Card, TextField } from '@mui/material';
+import { Card, TextField, Snackbar } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 // components
 import CreatePost from '../../components/create-post/CreatePost';
@@ -17,39 +20,42 @@ export default function AdminCreate() {
 
     const [newTitle, setNewTitle] = useState('');
     const [newContent, setNewContent] = useState('');
-    const [created, setCreated] = useState(true); 
-    const [failedToCreate, setFailedToCreate] = useState(false);
+    const [showFeedback, setShowFeedback] = useState(false); // if user alert should be shown
+    const [feedbackType, setFeedbackType] = useState('');
+    const [feedbackTitle, setFeedbackTitle] = useState('');
+    const [feedbackDesc, setFeedbackDesc] = useState('');
 
-    const [post, setPost] = useState(
-        {
-            title: '',
-            content: ''
-        }
-    );
+    const [valid, setValid] = useState(null); // for save feature
+
+    const [post, setPost] = useState({title: '', content: ''});
+
 
     const handleCancel = () => {
         history.push('/home');
     }
 
     const handleSave = async () => {
-        const today = new Date().toISOString().slice(0, 10);        
+        setValid(null);
 
-        const doc = { 
-            author: 'placeholder',
-            title: newTitle,
-            content: newContent,
-            date: today 
-        };
+        validTitle(newTitle, setFeedbackDesc, setValid).then(res => {
+            setValid(res);
+        });
+    }
 
-        try {
-            await projFirestore.collection('posts').add(doc);
-             history.push('/home');
-            // history.push(`/posts${newTitle}`); will send user to their post eventually
-        } catch(err) {
-            console.log(err);
+    useEffect(() => {
+        const ac = new AbortController();
+
+        if (valid !== null && typeof valid !== 'undefined') {
+            console.log("reached");
+            savePost(setFeedbackType, setFeedbackTitle, setShowFeedback, setFeedbackDesc, newTitle, newContent, history, valid).then(res => {
+                setShowFeedback(true);
+                console.log(showFeedback);
+            })
         }
 
-    }
+        return () => ac.abort();
+    }, [valid]);
+
 
     return (
         <>
@@ -60,7 +66,6 @@ export default function AdminCreate() {
                     setNewContent={setNewContent}
                     handleSave={handleSave}>
                     <TextField
-                        required
                         id="outlined-required"
                         onChange={(e) => setNewTitle(e.target.value)}
                         label="Title"
@@ -68,16 +73,20 @@ export default function AdminCreate() {
                 </CreatePost>
             </Card>
 
-            {/* {created && 
-                <Alert 
-                    severity={'success'}
-                    title={'Created Post!'}
-                    description={'The post was created! Users will be able to reply in just a moment....'}/>
-            } */}
+        {showFeedback && 
+            <Snackbar 
+                open={showFeedback} 
+                onClose={() => setShowFeedback(false)}>
+                    <Alert 
+                        severity={feedbackType}
+                        className={styles.alert}
+                        onClose={() => setShowFeedback(false)}>
+                        <AlertTitle>{feedbackTitle}</AlertTitle>
+                        {feedbackDesc}
+                    </Alert>
+            </Snackbar>
+        }
 
-            {/* {failedToCreate && 
-                <Alert />
-            } */}
         </>
   )
 }
