@@ -1,5 +1,4 @@
 // react imports
-import { projFirestore } from '../../firebase/config';
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import validTitle from '../../functions/isValid';
@@ -29,8 +28,6 @@ export default function AdminCreate() {
 
     const [post, setPost] = useState({title: '', content: ''});
 
-    // to do, check user title and make sure it is unquie, give message if not
-    // make sure description isn't empty
 
     const handleCancel = () => {
         history.push('/home');
@@ -42,6 +39,8 @@ export default function AdminCreate() {
 
     useEffect(() => {
         const ac = new AbortController();
+
+        setShowFeedback(false);
 
         if (valid !== null && typeof valid !== 'undefined') {
             savePost(setFeedbackType, setFeedbackTitle, setShowFeedback, setFeedbackDesc, newTitle, newContent, history, valid);

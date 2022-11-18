@@ -14,16 +14,11 @@ const validTitle = async (title, setFeedbackDesc, setValid) => {
         return;
     }
 
-    title = title.replace(/\ /g,'');
-    title = title.toLowerCase();
+    let titleLink = title.replace(/[^a-zA-Z]/g, "");
+    titleLink = titleLink.toLowerCase();
 
-
-
-    projFirestore.collection('titles').doc(title).get().then(data=> {
+    projFirestore.collection('titles').doc(titleLink).get().then(data=> {
         if (data.exists) {
-            console.log(data);
-            console.log("reached invalid in isValid, line 24");
-            console.log(title);
             setFeedbackDesc('A post with that tile already exists. Please choose a new title!');
             setValid(false);
         }

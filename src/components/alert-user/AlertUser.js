@@ -12,6 +12,8 @@ import styles from './AlertUser.module.css';
 export default function AlertUser({ display, severity, title, description }) {
     const [showAlert, setShowAlert] = useState(display);
 
+    console.log(showAlert);
+
     return (
         <Snackbar 
             open={showAlert} 

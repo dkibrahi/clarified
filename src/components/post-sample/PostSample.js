@@ -16,15 +16,13 @@ import styles from './PostSample.module.css';
 
 export default function PostSample({ post }) {
   const history = useHistory();
-  const linkTitle = post.title.replace(/\ /g,'-');
+  let linkTitle = post.title.replace(/[^a-zA-Z]/g, "");
+  linkTitle = linkTitle.toLowerCase();
   const postDate = post.date.toDate().toDateString(); 
 
   const handleDelete = async () => {
-    let titleInDB = post.title.replace(/[^a-zA-Z-]/g, "");
-    titleInDB = titleInDB.toLowerCase();
-
     await projFirestore.collection('posts').doc(post.id).delete();
-    await projFirestore.collection('titles').doc(titleInDB).delete();
+    await projFirestore.collection('titles').doc(linkTitle).delete();
 
     window.location.reload();
   }
