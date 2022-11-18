@@ -1,38 +1,26 @@
 // react imports
-import { useState } from 'react';
+
+
+// components
+import Particle from '../../components/Particle/Particle';
+import Form from '../../components/form/Form';
 
 // styles
 import styles from './Login.module.css';
 
 export default function Login() {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log(email, password);
+    const handleSubmit = (email) => {
+        alert(email);
     }
 
     return (
-        <form onSubmit={handleSubmit} className={styles["login-form"]}>
-            <h2>Login</h2>
-            <label>
-                <span>email:</span>
-                <input 
-                    type='text'
-                    onChange={(e) => setEmail(e.target.value)}
-                    value={email}
-                />
-            </label>
-            <label>
-                <span>password:</span>
-                <input 
-                    type='password'
-                    onChange={(e) => {setPassword(e.target.value)}}
-                    value={password}
-                />
-            </label>
-            <button className='btn'>Login</button>
-        </form>
+        <>
+            <Particle/>
+            <Form 
+                title="Log in"
+                buttonText="Log in"
+                handleSubmit={handleSubmit}
+            />
+        </>
   )
 }

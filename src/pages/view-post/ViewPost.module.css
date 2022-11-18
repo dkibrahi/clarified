@@ -1,0 +1,22 @@
+.card {
+    margin: 2em 5em;
+    padding: 1em;
+}
+
+.card .options {
+    float: right;
+}
+
+.card span {
+    padding-left: inherit;
+}
+
+.card .editPost, .card .defaultPost {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 1em;
+}
+
+.card .editPost {
+    gap: 1em;
+}

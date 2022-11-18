@@ -1,0 +1,8 @@
+.optionsIcon {
+    float: right;
+}
+
+
+.editIcon, .deleteIcon, .flagIcon {
+    margin: auto;
+}

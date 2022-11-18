@@ -1,0 +1,20 @@
+.error-page {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 1em 0;
+}
+
+.error-page span {
+    color: red;
+    display: inline-block;
+}
+
+.error-page span:hover {
+    cursor: pointer;
+}
+
+.error-page img {
+    width: 35vw;
+    margin-bottom: 1em;
+}
