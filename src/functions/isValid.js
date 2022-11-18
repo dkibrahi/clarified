@@ -29,7 +29,6 @@ const validTitle = async (title, setFeedbackDesc, setValid) => {
         }
 
         else {
-            alert("nani");
             setValid(true);
         }
 

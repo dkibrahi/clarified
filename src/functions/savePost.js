@@ -4,8 +4,6 @@ import { useHistory } from 'react-router-dom';
 
 const savePost = async (setFeedbackType, setFeedbackTitle, setShowFeedback, setFeedbackDesc, title, content, history, isValid) => {
     if (!isValid) {
-        console.log(isValid);
-        alert("reached saved post and not valid");
         setFeedbackType('error');
         setFeedbackTitle('Error Creating Post');
         setShowFeedback(true);
