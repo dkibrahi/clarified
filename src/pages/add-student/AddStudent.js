@@ -3,7 +3,7 @@ import { projFirestore } from '../../firebase/config';
 
 // components
 import Particle from '../../components/Particle/Particle';
-import Form from '../../components/form/Form';
+import Form from '../../components/Form/Form';
 
 // styles
 import styles from './AddStudent.module.css';
