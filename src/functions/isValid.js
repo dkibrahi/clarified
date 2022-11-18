@@ -4,14 +4,12 @@ import { projFirestore } from '../firebase/config';
 const validTitle = async (title, setFeedbackDesc, setValid) => {
     if (title.length === 0) {
         setFeedbackDesc('Please enter a title for the post');
-        setValid(false);
-        return;
+        return false;
     }
 
     if (title.length >= 40) {
         setFeedbackDesc('Please shorten the length of the post to under 40 characters');
-        setValid(false);
-        return;
+        return false;
     }
 
     let titleLink = title.replace(/[^a-zA-Z]/g, "");
@@ -21,14 +19,17 @@ const validTitle = async (title, setFeedbackDesc, setValid) => {
         if (data.exists) {
             setFeedbackDesc('A post with that tile already exists. Please choose a new title!');
             setValid(false);
+            return false;
         }
 
         else {
             setValid(true);
+            return true;
         }
 
     }, (err) => {
         setValid(false);
+        return false;
     });
 }
 

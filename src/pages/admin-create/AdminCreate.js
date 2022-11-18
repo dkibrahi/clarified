@@ -5,11 +5,12 @@ import validTitle from '../../functions/isValid';
 import savePost from '../../functions/savePost';
 
 // icons
-import { Card, TextField } from '@mui/material';
+import { Card, TextField, Snackbar } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 // components
 import CreatePost from '../../components/create-post/CreatePost';
-import AlertUser from '../../components/alert-user/AlertUser';
 
 // styles
 import styles from './AdminCreate.module.css';
@@ -34,25 +35,27 @@ export default function AdminCreate() {
     }
 
     const handleSave = async () => {
-        await validTitle(newTitle, setFeedbackDesc, setValid);
+        setValid(null);
+
+        validTitle(newTitle, setFeedbackDesc, setValid).then(res => {
+            setValid(res);
+        });
     }
 
     useEffect(() => {
         const ac = new AbortController();
 
-        setShowFeedback(false);
-
         if (valid !== null && typeof valid !== 'undefined') {
-            savePost(setFeedbackType, setFeedbackTitle, setShowFeedback, setFeedbackDesc, newTitle, newContent, history, valid);
+            console.log("reached");
+            savePost(setFeedbackType, setFeedbackTitle, setShowFeedback, setFeedbackDesc, newTitle, newContent, history, valid).then(res => {
+                setShowFeedback(true);
+                console.log(showFeedback);
+            })
         }
 
         return () => ac.abort();
     }, [valid]);
 
-    const handleChange = (e) => {
-        setNewTitle(e.target.value);
-        setShowFeedback(false);
-    }
 
     return (
         <>
@@ -64,17 +67,24 @@ export default function AdminCreate() {
                     handleSave={handleSave}>
                     <TextField
                         id="outlined-required"
-                        onChange={(e) => handleChange(e)}
+                        onChange={(e) => setNewTitle(e.target.value)}
                         label="Title"
                         defaultValue={post.title}/>
                 </CreatePost>
             </Card>
 
-        {showFeedback && <AlertUser 
-            display={showFeedback}
-            severity={feedbackType}
-            title={feedbackTitle}
-            description={feedbackDesc}/>
+        {showFeedback && 
+            <Snackbar 
+                open={showFeedback} 
+                onClose={() => setShowFeedback(false)}>
+                    <Alert 
+                        severity={feedbackType}
+                        className={styles.alert}
+                        onClose={() => setShowFeedback(false)}>
+                        <AlertTitle>{feedbackTitle}</AlertTitle>
+                        {feedbackDesc}
+                    </Alert>
+            </Snackbar>
         }
 
         </>
