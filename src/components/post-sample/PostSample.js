@@ -1,6 +1,6 @@
 // react imports
 import { projFirestore } from '../../firebase/config';
-import { Link, useHistory } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
 // icons
 import { Card, CardContent, Fab } from '@mui/material';
@@ -12,13 +12,19 @@ import MoreOptions from '../more-options/MoreOptions';
 // styles 
 import styles from './PostSample.module.css';
 
-
-
 export default function PostSample({ post }) {
   const history = useHistory();
-  let linkTitle = post.title.replace(/[^a-zA-Z]/g, "");
+
+  let linkTitle = post.title.replace(/\s\s+/g, ' ');
+  linkTitle = linkTitle.replace(/ /g, "-");
+  linkTitle = linkTitle.replace(/[^a-zA-Z-]/g, "");
   linkTitle = linkTitle.toLowerCase();
-  const postDate = post.date.toDate().toDateString(); 
+
+  const fireBaseTime = new Date(
+      post.date.seconds * 1000 + post.date.nanoseconds / 1000000,
+  );
+    
+  const postDate = fireBaseTime.toDateString();
 
   const handleDelete = async () => {
     await projFirestore.collection('posts').doc(post.id).delete();
@@ -27,10 +33,10 @@ export default function PostSample({ post }) {
     window.location.reload();
   }
 
-  const handleEdit = () => {
+  const sendToEdit = (editStatus=true) => {
     history.push({
       pathname: `/posts/${linkTitle}`,
-      state: {edit: true}
+      state: {edit: editStatus}
     }); 
   }
 
@@ -40,7 +46,7 @@ export default function PostSample({ post }) {
           size="small" 
           postID={post.id}
           handleDelete={handleDelete}
-          handleEdit={handleEdit}
+          handleEdit={sendToEdit}
           displayEdit={true}
           displayDelete={true}
           displayFlag={false}
@@ -50,15 +56,10 @@ export default function PostSample({ post }) {
         <CardContent>
           <div>{post.content.substring(0, 100)}</div>
         </CardContent>
-        <Link to={{
-            pathname: `/posts/${linkTitle}`,
-            state: {edit: false}
-          }}>
-        <Fab variant="extended" size="small">
+        <Fab variant="extended" size="small" onClick={() => sendToEdit(false)}>
             <VisibilityIcon sx={{ mr: 1 }} />
             Full Post
         </Fab>
-        </Link>
     </Card>
   )
 }
