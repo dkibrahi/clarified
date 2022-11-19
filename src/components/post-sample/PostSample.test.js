@@ -6,8 +6,6 @@ import userEvent from '@testing-library/user-event';
 // component 
 import PostSample from "./PostSample";
 
-
-
 const mockHistoryPush = jest.fn();
 
 jest.mock('react-router-dom', () => ({
