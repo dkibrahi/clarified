@@ -1,11 +1,9 @@
 // react import
 import * as React from 'react';
-import { useState } from 'react';
 
 // title
-import validTitle from "./isValid";
-
-
+import { validTitle } from './title';
+import { cleanTitle } from './title';
 
 describe('Testing title validity', () => {
     it("empty title return false", async () => {
@@ -30,3 +28,31 @@ describe('Testing title validity', () => {
 
     });
 });
+
+// cleanTitle() will be used as the slug URL. This is different than the actual title of the post
+describe ('Testing cleanTitle', () => {
+    it("Casing is removed from title", () => {
+       const res = cleanTitle('Introduction');
+       expect(res).toEqual('introduction');
+    });
+
+    it("puncuation is removed from title", () => {
+        const res = cleanTitle('introduction!!!!!!!!!!!!!!!,.,.,.,..,');
+        expect(res).toEqual('introduction');
+    });
+
+    it("Spacing is removed from title", () => {
+        const res = cleanTitle('introduction    to    class');
+        expect(res).toEqual('introduction-to-class');
+    });
+
+    it("remove leading and trailing whitespace", () => {
+        const res = cleanTitle('  introduction to class  ');
+        expect(res).toEqual('introduction-to-class');
+    });
+
+    it("edge case", () => {
+        const res = cleanTitle('Introduction ,/. to    class');
+        expect(res).toEqual('introduction-to-class');
+    });
+})

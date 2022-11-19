@@ -6,8 +6,9 @@ import { useHistory } from 'react-router-dom';
 import { Card, CardContent, Fab } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
-// components
+// components and functions
 import MoreOptions from '../more-options/MoreOptions';
+import { cleanTitle } from '../../functions/title';
 
 // styles 
 import styles from './PostSample.module.css';
@@ -15,10 +16,7 @@ import styles from './PostSample.module.css';
 export default function PostSample({ post }) {
   const history = useHistory();
 
-  let linkTitle = post.title.replace(/\s\s+/g, ' ');
-  linkTitle = linkTitle.replace(/ /g, "-");
-  linkTitle = linkTitle.replace(/[^a-zA-Z-]/g, "");
-  linkTitle = linkTitle.toLowerCase();
+  let linkTitle = cleanTitle(post.title);
 
   const fireBaseTime = new Date(
       post.date.seconds * 1000 + post.date.nanoseconds / 1000000,
@@ -28,12 +26,12 @@ export default function PostSample({ post }) {
 
   const handleDelete = async () => {
     await projFirestore.collection('posts').doc(post.id).delete();
-    await projFirestore.collection('titles').doc(linkTitle).delete();
-
     window.location.reload();
   }
 
   const sendToEdit = (editStatus=true) => {
+    linkTitle = linkTitle + '-' + post.id;
+
     history.push({
       pathname: `/posts/${linkTitle}`,
       state: {edit: editStatus}

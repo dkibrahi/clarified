@@ -1,6 +1,9 @@
 // react imports
 import { projFirestore } from '../firebase/config';
 
+// functions
+import { cleanTitle } from '../functions/title';
+
 const savePost = async (setFeedbackType, setFeedbackTitle, setFeedbackDesc, title, content, history, isValid) => {
     if (!isValid) {
         setFeedbackType('error');
@@ -8,29 +11,27 @@ const savePost = async (setFeedbackType, setFeedbackTitle, setFeedbackDesc, titl
         return;
     }    
 
+    let linkTitle = cleanTitle(title);
+
     const doc = { 
         author: 'placeholder',
         title: title,
         content: content,
-        date: new Date()
+        date: new Date(),
+        linkTitle: linkTitle
     };
 
     try {
         const firebaseObj = await projFirestore.collection('posts').add(doc);
         const postID = firebaseObj.id;
 
-        let titleLink = title.replace(/[^a-zA-Z]/g, "");
-        titleLink = titleLink.toLowerCase();
-
-        await projFirestore.collection('titles').doc(titleLink).set({'postID': postID});
         setFeedbackType('success');
         setFeedbackTitle('Post Created');
         setFeedbackDesc('Post saved! Do NOT refresh. Users will be able to reply in just a moment...');
 
-        titleLink = title.replace(/ /g,'-');
-        titleLink = titleLink.replace(/[^a-zA-Z-]/g, "");
-        titleLink = titleLink.toLowerCase();
-        setTimeout(() => history.push(`/posts/${titleLink}`), 2500);
+        linkTitle = linkTitle + '-' + postID;
+
+        setTimeout(() => history.push(`/posts/${linkTitle}`), 2500);
     } catch(err) {
         setFeedbackType('error');
         setFeedbackTitle('Error Creating Post');

@@ -19,7 +19,7 @@ describe(PostSample, () => {
         jest.clearAllMocks();
     });
 
-    it("Casing is removed from title", () => {
+    it("edit is false when clicked on fab", () => {
         const post = {
             title: 'Introduction',
             date: new Date(),
@@ -37,35 +37,5 @@ describe(PostSample, () => {
         screen.getByText('Full Post').click();
 
         expect(mockHistoryPush).toBeCalledWith({"pathname": "/posts/introduction", "state": {"edit": false}});
-    });
-
-    it("puncuation is removed from title", () => {
-        const post = {
-            title: 'introduction!!!!!!!!!!!!!!!,.,.,.,..,',
-            date: new Date(),
-            content: 'Anything',
-            author: 'anything'
-        }
-
-        render(<PostSample post={post} />);
-
-        screen.getByText('Full Post').click();
-
-        expect(mockHistoryPush).toBeCalledWith({"pathname": "/posts/introduction", "state": {"edit": false}});
-    });
-
-    it("Spacing is removed from title", () => {
-        const post = {
-            title: 'introduction    to    class',
-            date: new Date(),
-            content: 'Anything',
-            author: 'anything'
-        }
-
-        render(<PostSample post={post} />);
-
-        screen.getByText('Full Post').click();
-
-        expect(mockHistoryPush).toBeCalledWith({"pathname": "/posts/introduction-to-class", "state": {"edit": false}});
     });
 });
