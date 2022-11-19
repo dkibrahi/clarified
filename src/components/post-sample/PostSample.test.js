@@ -1,9 +1,12 @@
 // react
-import { render } from "@testing-library/react";
+import { render, screen } from "@testing-library/react";
+import userEvent from '@testing-library/user-event';
 
 
 // component 
 import PostSample from "./PostSample";
+
+
 
 const mockHistoryPush = jest.fn();
 
@@ -15,19 +18,57 @@ jest.mock('react-router-dom', () => ({
 }));
 
 describe(PostSample, () => {
-    it("Title is changed correctly", () => {
+    afterEach(() => {
+        jest.clearAllMocks();
+    });
+
+    it("Casing is removed from title", () => {
         const post = {
-            title: 'Anything',
+            title: 'Introduction',
             date: new Date(),
             content: 'Anything',
             author: 'anything'
         }
 
-        const { container } = render(<PostSample post={post} />);
-        
+        const expected = {
+            "pathname": '/posts/introduction',
+            'edit': false
+        }
 
-        // expect error message to be returned instead of posts
-        // expect(errorDiv.length).toBeTruthy(); 
-        // expect(postDiv.length).toBeFalsy(); 
+        render(<PostSample post={post} />);
+
+        screen.getByText('Full Post').click();
+
+        expect(mockHistoryPush).toBeCalledWith({"pathname": "/posts/introduction", "state": {"edit": false}});
+    });
+
+    it("puncuation is removed from title", () => {
+        const post = {
+            title: 'introduction!!!!!!!!!!!!!!!,.,.,.,..,',
+            date: new Date(),
+            content: 'Anything',
+            author: 'anything'
+        }
+
+        render(<PostSample post={post} />);
+
+        screen.getByText('Full Post').click();
+
+        expect(mockHistoryPush).toBeCalledWith({"pathname": "/posts/introduction", "state": {"edit": false}});
+    });
+
+    it("Spacing is removed from title", () => {
+        const post = {
+            title: 'introduction    to    class',
+            date: new Date(),
+            content: 'Anything',
+            author: 'anything'
+        }
+
+        render(<PostSample post={post} />);
+
+        screen.getByText('Full Post').click();
+
+        expect(mockHistoryPush).toBeCalledWith({"pathname": "/posts/introduction-to-class", "state": {"edit": false}});
     });
 });

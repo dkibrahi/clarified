@@ -17,7 +17,9 @@ import styles from './PostSample.module.css';
 export default function PostSample({ post }) {
   const history = useHistory();
 
-  let linkTitle = post.title.replace(/[^a-zA-Z]/g, "");
+  let linkTitle = post.title.replace(/\s\s+/g, ' ');
+  linkTitle = linkTitle.replace(/ /g, "-");
+  linkTitle = linkTitle.replace(/[^a-zA-Z-]/g, "");
   linkTitle = linkTitle.toLowerCase();
 
   const fireBaseTime = new Date(
