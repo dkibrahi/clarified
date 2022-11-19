@@ -12,8 +12,6 @@ import MoreOptions from '../more-options/MoreOptions';
 // styles 
 import styles from './PostSample.module.css';
 
-
-
 export default function PostSample({ post }) {
   const history = useHistory();
 
@@ -24,7 +22,7 @@ export default function PostSample({ post }) {
 
   const fireBaseTime = new Date(
       post.date.seconds * 1000 + post.date.nanoseconds / 1000000,
-    );
+  );
     
   const postDate = fireBaseTime.toDateString();
 
