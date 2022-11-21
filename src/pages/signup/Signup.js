@@ -22,8 +22,9 @@ export default function Signup() {
         const username = usernameRef.current.value;
 
         // validate email, password, username before allowing to sign up
-
-        registerUser(email, password, username)
+        if (email && password && username) {
+            registerUser(email, password, username);
+        }
     }
     
 

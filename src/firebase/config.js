@@ -20,3 +20,7 @@ const projFirestore = firebase.firestore();
 const projAuth = firebase.auth();
 
 export { projFirestore, projAuth } ;
+
+//test
+const app = initializeApp(firebaseConfig);
+export const auth = getAuth(app);
