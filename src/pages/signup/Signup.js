@@ -1,19 +1,21 @@
 // react imports
 import { useState } from 'react';
+import { useSignup } from '../../hooks/useSignup';
 import Particle from '../../components/Particle/Particle';
 
 // styles
 import styles from './Signup.module.css';
+import { getDisplayName } from '@mui/utils';
 
 export default function Signup() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
+    const { Signup, error, isPending } = useSignup();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-
-        console.log(email, password, username);
+        signup(email, password, displayName);
     }
 
     return (
@@ -24,7 +26,7 @@ export default function Signup() {
                 <label>
                     <span>Email:</span>
                     <input 
-                        type='text'
+                        type='email'
                         onChange={(e) => setEmail(e.target.value)}
                         value={email}
                     />
@@ -46,7 +48,9 @@ export default function Signup() {
                     />
                 </label>
 
-                <button className='btn'>Sign up</button>
+                {!isPending && <button className='btn'>Signup</button>}
+                {isPending && <button className='btn' disabled>loading</button>}
+                {error && <p>{error}</p>}
             </form>
         </>
     )
