@@ -1,4 +1,4 @@
-import { createContext, useEffect } from "react";
+import { createContext, useEffect, useState, useContext } from "react";
 import {
     createUserWithEmailAndPassword, 
     updateProfile, 
@@ -7,20 +7,13 @@ import {
     signOut,
     sendPasswordResetEmail,
     sendEmailVerification
-     } from "firebase/auth"
-//import  { auth } from "../firebase";
-import { auth } from "../firebase/config";
+     } from "@firebase/auth";
 
-//export from firebase/auth
 import { projAuth } from "../firebase/config"
-
-
-
-// use code from userContext 
 
 const UserContext = createContext({});
 
-export const useUserContext = () => uerContext(UserContext);
+export const useUserContext = () => useContext(UserContext);
 
 export const UserContextProvider = ({ children }) => {
 
@@ -30,7 +23,7 @@ export const UserContextProvider = ({ children }) => {
 
     useEffect(() => {
         setLoading(true)
-        const unsubscribe = onAuthStateChanged(auth, res => {
+        const unsubscribe = onAuthStateChanged(projAuth, res => {
             res ? setUser(res) : setUser(null);
             setError("");
             setLoading(false);
@@ -41,9 +34,9 @@ export const UserContextProvider = ({ children }) => {
     const registerUser = (email, name, password) => {
         ///
         setLoading(true);
-        createUserWithEmailAndPassword (auth, email, password)
+        createUserWithEmailAndPassword (projAuth, email, password)
         .then(() => {
-                return updateProfile(auth.currentUser, {displayName: name})
+                return updateProfile(projAuth.currentUser, {displayName: name})
         })
         .then((res) => console.log(res))
         .catch((err) => setError(err.message))
@@ -53,7 +46,7 @@ export const UserContextProvider = ({ children }) => {
     const signInUser = (email, password) => {
         ///
         setLoading(true);
-        signInWithEmailAndPassword(auth, email, password)
+        signInWithEmailAndPassword(projAuth, email, password)
         .then((res) => console.log(res))
         .catch((err) => setError(err.message))
         .finally(() => setLoading(false));
@@ -61,12 +54,12 @@ export const UserContextProvider = ({ children }) => {
 
     const logoutUser = () => {
         ///\
-        signOut(auth);
+        signOut(projAuth);
     }
 
     const forgotPassword = (email) => {
         ///
-        return sendPasswordResetEmail(auth, email);
+        return sendPasswordResetEmail(projAuth, email);
     }
 
 
