@@ -11,11 +11,11 @@ export default function Signup() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [username, setUsername] = useState('');
-    const { Signup, error, isPending } = useSignup();
+    const { signup, error, isPending } = useSignup();
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        signup(email, password, displayName);
+        signup(email, password, username);
     }
 
     return (
