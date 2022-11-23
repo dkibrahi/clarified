@@ -1,16 +1,16 @@
 // react imports
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
-import validTitle from '../../functions/isValid';
-import savePost from '../../functions/savePost';
 
 // icons
 import { Card, TextField, Snackbar } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 
-// components
+// components and functions
 import CreatePost from '../../components/create-post/CreatePost';
+import { validTitle } from '../../functions/title';
+import savePost from '../../functions/savePost';
 
 // styles
 import styles from './AdminCreate.module.css';
@@ -46,10 +46,8 @@ export default function AdminCreate() {
         const ac = new AbortController();
 
         if (valid !== null && typeof valid !== 'undefined') {
-            console.log("reached");
             savePost(setFeedbackType, setFeedbackTitle, setFeedbackDesc, newTitle, newContent, history, valid).then(res => {
                 setShowFeedback(true);
-                console.log(showFeedback);
             })
         }
 

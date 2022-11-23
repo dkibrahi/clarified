@@ -4,7 +4,7 @@ import { useLocation, useHistory, useParams } from "react-router-dom";
 import { useState, useEffect } from 'react';
 
 // icons
-import { Card, CardContent } from '@mui/material';
+import { Card, CardContent, TextField } from '@mui/material';
 import ReplyIcon from '@mui/icons-material/Reply';
 import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
@@ -12,10 +12,13 @@ import Divider from '@mui/material/Divider';
 // components
 import MoreOptions from '../../components/more-options/MoreOptions';
 import CreatePost from '../../components/create-post/CreatePost';
+import Loading from '../../components/loading-screen/Loading';
+
+// functions
+import { cleanTitle } from '../../functions/title';
 
 // styles 
 import styles from './ViewPost.module.css';
-import Loading from '../../components/loading-screen/Loading';
 
 export default function ViewPost() {
     const history = useHistory();
@@ -25,6 +28,7 @@ export default function ViewPost() {
     let { titleLink } = useParams();
 
     const [isEditing, setIsEditing] = useState(false);
+    const [newTitle, setNewTitle] = useState('');
     const [newContent, setNewContent] = useState('');
     const [postDate, setPostDate] = useState(null);
 
@@ -61,10 +65,19 @@ export default function ViewPost() {
 
             else {
                 let result = {id: postID, ...snapshot.data()};
+
+                if (!result.title) {
+                    setError("Post was not found");
+                }
+
+                else {
+                    setPostDate(result.date.toDate().toDateString()); 
+
+                    setPost(result);
+                    setNewTitle(result.title);
+                    setNewContent(result.content);
+                }
                 
-                setPostDate(result.date.toDate().toDateString()); 
-                setPost(result);
-                setNewContent(result.content);
                 setIsPending(false);
             }
         
@@ -76,31 +89,16 @@ export default function ViewPost() {
         return () => ac.abort();
     }, [isEditing, postID]);
 
+
     const grabPostID = () => {
-        titleLink = titleLink.replace(/\-/g,'');
-        titleLink = titleLink.toLowerCase();
+        if (!(titleLink.includes('-'))) {
+            history.push('/error');
+        }
 
-        projFirestore.collection('titles').doc(titleLink).get().then(res => {
-            if (res.empty) {
-                setError("Post was not found");
-                setIsPending(false);
-            }
-
-            else {
-                setPostID(res.data().postID);
-            }
-
-        }, (err) => {
-            setError(err.message);
-            setIsPending(false);
-        });
+        setPostID(titleLink.split('-').pop());
     }
 
     const handleDelete = async () => {
-        let titleInDB = post.title.replace(/[^a-zA-Z-]/g, "");
-        titleInDB = titleInDB.toLowerCase();
-
-        await projFirestore.collection('titles').doc(titleInDB).delete();
         await projFirestore.collection('posts').doc(post.id).delete();
         history.push('/home');
     }
@@ -110,11 +108,18 @@ export default function ViewPost() {
     }
     
     const handleSave = async () => {
-        await projFirestore.collection('posts').doc(post.id).update({    
-            content: newContent
+        let linkTitle = cleanTitle(newTitle);
+
+        await projFirestore.collection('posts').doc(post.id).update({ 
+            title: newTitle,   
+            content: newContent,
+            linkTitle: linkTitle
         });
         
-        setIsEditing(false);
+        linkTitle = linkTitle + '-' + post.id;
+
+        history.push(`/posts/${linkTitle}`);
+        window.location.reload();
     }
 
 
@@ -141,7 +146,12 @@ export default function ViewPost() {
                         setNewContent={setNewContent}
                         setView={setIsEditing}
                         handleSave={handleSave}>
-                            <h3>{post.title}</h3>
+                            <TextField
+                            required
+                            id="outlined-required"
+                            onChange={(e) => setNewTitle(e.target.value)}
+                            label="Title"
+                            defaultValue={post.title}/>
                     </CreatePost>
                 }
 

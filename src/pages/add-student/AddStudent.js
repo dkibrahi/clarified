@@ -1,17 +1,20 @@
 // react imports
 import { projFirestore } from '../../firebase/config';
 
-// components
+// components and functions
 import Particle from '../../components/Particle/Particle';
 import Form from '../../components/Form/Form';
+import { validUniqname } from '../../functions/uniqname';
 
 export default function AddStudent() {
     const handleSubmit = async (uniqname) => {
-        if (!uniqname || !validInput(uniqname)) {
+        if (!uniqname || !validUniqname(uniqname)) {
             return false;
         }
         
         try {
+            uniqname = uniqname.toLowerCase();
+            
             await projFirestore.collection('users').doc(uniqname).set({
                 isAdmin: false
             });
@@ -23,26 +26,6 @@ export default function AddStudent() {
         }
     }
 
-    const cleanInput = (umichName) => {
-        umichName = umichName.toLowerCase();
-        umichName.trim();
-
-        return umichName;
-    }
-
-    const validInput = (umichName) => {
-        umichName = cleanInput(umichName);
-
-        const length = umichName.length;
-
-        if (length < 3 || length > 8) {
-            return false;
-        }
-
-        const onlyLowercase = /^[a-z]+$/.test(umichName);
-        
-        return onlyLowercase;
-    }
 
     return (
         <>
