@@ -1,6 +1,6 @@
 // react imports
 import { Link } from 'react-router-dom';
-
+import { useLogout } from '../hooks/useLogout';
 // icons
 import HomeIcon from '@mui/icons-material/Home';
 import AddIcon from '@mui/icons-material/Add';
@@ -10,6 +10,8 @@ import ContactsIcon from '@mui/icons-material/Contacts';
 import styles from './Navbar.module.css';
 
 export default function Navbar() {
+  const { logout } = useLogout();
+
   return (
     <nav className={styles.navbar}>
         <ul>
@@ -29,6 +31,9 @@ export default function Navbar() {
               <ContactsIcon color="primary"/>
               </Link>
             </li>
+              <li> 
+                <button className="btn" onClick={logout}>Logout</button>
+              </li>
         </ul>
     </nav>
   )
