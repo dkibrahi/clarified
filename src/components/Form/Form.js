@@ -5,17 +5,26 @@ import { useState } from 'react';
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
 import Divider from '@mui/material/Divider';
+import Button from '@mui/material/Button';
+import { Snackbar } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 // styles
 import styles from './Form.module.css';
 
 export default function Form(props) {
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        props.handleSubmit(); // let parent handle submit
+    }
+
     return (
         <>
             <form className={styles["login-form"]}>
                 <h2>{props.title}</h2>
                 <Paper
-                    component="form"
                     className={styles["input-bar"]}
                     sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
                     >
@@ -27,7 +36,40 @@ export default function Form(props) {
                     <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
                     <span>@umich.edu</span>
                 </Paper>
+
                 {props.children}
+
+                {
+                    !props.isPending && 
+                    <Button 
+                        variant="outlined" 
+                        onClick={(e) => handleSubmit(e)}>
+                        Sign Up
+                    </Button>
+                }
+
+                {
+                    props.isPending && 
+                    <Button 
+                        variant="outlined">
+                        Loading...
+                    </Button>
+                }
+
+                {
+                    props.displayAlert && 
+                    <Snackbar 
+                        open={props.displayAlert} 
+                        onClose={() => props.setDisplayAlert(false)}>
+                            <Alert 
+                                severity={props.feedbackType}
+                                className={styles.alert}
+                                onClose={() => props.setDisplayAlert(false)}>
+                                <AlertTitle>{props.feedbackTitle}</AlertTitle>
+                                {props.feedbackDesc}
+                            </Alert>
+                    </Snackbar>
+                }
             </form>
         </>
     )

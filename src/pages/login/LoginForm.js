@@ -5,27 +5,26 @@ import { useState } from 'react';
 import Form from '../../components/Form/Form';
 
 // functions/hooks
-import { useSignup } from '../../hooks/useSignup';
+import { useLogin } from '../../hooks/useLogin';
 
 // icons
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
 
-export default function SignupForm() {
+export default function LoginForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
-    const [username, setUsername] = useState('');
 
     const [displayAlert, setDisplayAlert] = useState(false);
     const [feedbackType, setFeedbackType] = useState('');
     const [feedbackTitle, setFeedbackTitle] = useState('');
     const [feedbackDesc, setFeedbackDesc] = useState('');
 
-    const { signup, error, isPending } = useSignup();
+    const { login, error, isPending } = useLogin();
     
     
     const handleSubmit = () => {
-        signup(email, password, username, setDisplayAlert, setFeedbackType, setFeedbackTitle, setFeedbackDesc);
+        login(email, password);
     }
 
     return (
@@ -48,18 +47,6 @@ export default function SignupForm() {
                     placeholder="password"
                     onChange={(e) => setPassword(e.target.value)}
                     value={password}
-                />
-            </Paper>
-
-            <Paper
-                className="input-bar"
-                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
-                >
-                <InputBase
-                    sx={{ ml: 1, flex: 1 }}
-                    placeholder="username"
-                    onChange={(e) => setUsername(e.target.value)}
-                    value={username}
                 />
             </Paper>
 
