@@ -1,12 +1,12 @@
 // react imports
 export const validTitle = async (title, setFeedbackDesc, setValid) => {
-    if (title.length === 0) {
-        setFeedbackDesc('Please enter a title for the post');
+    if (title.length < 5) {
+        setFeedbackDesc('Please enter a title for the post that is at least 5 characters.');
         return false;
     }
 
-    if (title.length >= 40) {
-        setFeedbackDesc('Please shorten the length of the post to under 40 characters');
+    if (title.length >= 30) {
+        setFeedbackDesc('Please shorten the length of the post to under 30 characters');
         return false;
     }
 

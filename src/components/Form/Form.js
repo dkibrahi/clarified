@@ -25,7 +25,7 @@ export default function Form(props) {
             <form className={styles["login-form"]}>
                 <h2>{props.title}</h2>
                 <Paper
-                    className={styles["input-bar"]}
+                    className={styles[props.emailError ? 'error-bar' : 'input-bar']}
                     sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
                     >
                     <InputBase
