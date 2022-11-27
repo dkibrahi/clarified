@@ -2,6 +2,7 @@
 import { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { projFirestore, projAuth } from '../firebase/config';
+import { validPassword } from '../functions/password';
 
 // hooks/functions
 import { validUniqname } from '../functions/uniqname';
@@ -15,15 +16,19 @@ export const useSignup = () => {
 
     const history = useHistory();
 
-    const signup = async (uniqname, password, displayName, setDisplayAlert, setFeedbackType, setFeedbackTitle, setFeedbackDesc) => {
+    const signup = async (uniqname, password, alertUser) => {
         setError(null);
         setIsPending(true);
 
         if (!validUniqname(uniqname)) {
-            setFeedbackType('error');
-            setFeedbackTitle('Uniqname error');
-            setFeedbackDesc('The uniqname is invalid. Please make you entered a valid uniqname with only english letters');
-            setDisplayAlert(true);
+            alertUser('error', 'Uniqname error', 'The uniqname is invalid. Please make you entered a valid uniqname with only english letters');
+
+            setIsPending(false);
+            return;
+        }
+
+        if (!validPassword(password)) {
+            alertUser('error', 'Password error', 'Invalid password. See form for more details');
 
             setIsPending(false);
             return;
@@ -32,35 +37,30 @@ export const useSignup = () => {
         try {
             await projFirestore.collection('users').doc(uniqname).get().then(data => {
                 if (!data.exists) {
-                    setFeedbackType('error');
-                    setFeedbackTitle('Roster Error');
-                    setFeedbackDesc('You are not on the list of students for this class. Please contact the professor');
-                    setDisplayAlert(true);
+                    alertUser('error', 'Roster Error', 'You are not on the list of students for this class. Please contact the professor');
+
                     setIsPending(false);
                 }
 
                 else {
-                    console.log("reached");
                     const email = uniqname + '@umich.edu';
-                    createAccount(email, password, displayName, setFeedbackType, setFeedbackTitle, setFeedbackDesc, setDisplayAlert);
+                    createAccount(email, password, alertUser);
                 }
             });
         } catch(err) {
-            setError(err.message);
+            alertUser('error', 'Something went wrong', err.message);
+
             setIsPending(false);
         }
     }
 
-    const createAccount = async (email, password, displayName, setFeedbackType, setFeedbackTitle, setFeedbackDesc, setDisplayAlert) => {
+    const createAccount = async (email, password, alertUser) => {
         try {
             const res = await projAuth.createUserWithEmailAndPassword(email, password);
 
             if (!res){
                 throw new Error('Could not complete the signup');
             }
-
-            //update display name
-            await res.user.updateProfile({ displayName });
 
             //dispatch user login
             dispatch({ type: 'LOGIN', payload: res.user});
@@ -71,15 +71,14 @@ export const useSignup = () => {
                 setError(null);
             }   
             
-            setFeedbackType('success');
-            setFeedbackTitle('Account Created!');
-            setFeedbackDesc('You created your account! Do NOT refresh. Taking you to the home page...');
-            setDisplayAlert(true);
+            alertUser('success', 'Account Created!', 'You created your account! Do NOT refresh. Taking you to the home page...');
 
             setTimeout(() => history.push('/'), 2500);
         }
         catch (err) {
             if (!isCancelled) {
+                alertUser('error', 'Something went wrong', err.message);
+                
                 setError(err.message);
             }
         }
@@ -87,5 +86,5 @@ export const useSignup = () => {
         setIsPending(false);
     }
 
-    return ( { signup, error, isPending } );
+    return ( { signup, isPending } );
 }
