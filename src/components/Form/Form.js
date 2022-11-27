@@ -44,7 +44,7 @@ export default function Form(props) {
                     <Button 
                         variant="outlined" 
                         onClick={(e) => handleSubmit(e)}>
-                        Sign Up
+                        Submit
                     </Button>
                 }
 
