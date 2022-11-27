@@ -28,12 +28,20 @@ export default function LoginForm() {
     
     
     const handleSubmit = () => {
-        login(email, password);
+        login(email, password, alertUser);
+    }
+
+    const alertUser = (status, title, desc) => {
+        setFeedbackType(status);
+        setFeedbackTitle(title);
+        setFeedbackDesc(desc);
+        setDisplayAlert(true);
     }
 
     return (
         <Form 
             title='Log in'
+            emailError={error}
             isPending={isPending}
             displayAlert={displayAlert}
             feedbackType={feedbackType}
@@ -44,7 +52,7 @@ export default function LoginForm() {
             setDisplayAlert={setDisplayAlert}
             >
             <Paper
-                className={styles["input-bar"]}
+                className={styles[error ? 'error-bar' : 'input-bar']}
                 sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
                 >
                 <InputBase
@@ -55,8 +63,6 @@ export default function LoginForm() {
                     value={password}
                 />
             </Paper>
-
-            {error && <p>{error}</p>}
         </Form>
     )
 }

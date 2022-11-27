@@ -15,7 +15,7 @@ export const useLogin = () => {
 
     const history = useHistory();
 
-    const login = async (uniqname, password) => {
+    const login = async (uniqname, password, alertUser) => {
         setError(null);
         setIsPending(true);
 
@@ -38,7 +38,8 @@ export const useLogin = () => {
         }
         catch (err) {
             if (!isCancelled) {
-                setError(err.message);
+                alertUser('error', 'Email and Password don\'t match match', err.message);
+                setError(true);
                 setIsPending(false);
             }
         }

@@ -10,25 +10,34 @@ import { useAuthContext } from './useAuthContext';
 
 export const useSignup = () => {
     const[ isCancelled, setIsCancelled ] = useState(false);
-    const [error, setError] = useState(null);
+    const [emailError, setEmailError] = useState(null);
+    const [passError, setPassError] = useState(null);
+    const [serverError, setServerError] = useState(null);
     const [isPending, setIsPending] = useState(false);
     const { dispatch } = useAuthContext();
 
     const history = useHistory();
 
     const signup = async (uniqname, password, alertUser) => {
-        setError(null);
+        setEmailError(null);
+        setPassError(null);
+        setServerError(null);
+
         setIsPending(true);
 
         if (!validUniqname(uniqname)) {
             alertUser('error', 'Uniqname error', 'The uniqname is invalid. Please make you entered a valid uniqname with only english letters');
+            setEmailError(true);
 
             setIsPending(false);
             return;
         }
 
-        if (!validPassword(password)) {
-            alertUser('error', 'Password error', 'Invalid password. See form for more details');
+        const message = validPassword(password);
+
+        if (message) {
+            alertUser('error', 'Password error', message);
+            setPassError(true);
 
             setIsPending(false);
             return;
@@ -49,6 +58,9 @@ export const useSignup = () => {
             });
         } catch(err) {
             alertUser('error', 'Something went wrong', err.message);
+            serverError(true);
+            setEmailError(true);
+            setPassError(true);
 
             setIsPending(false);
         }
@@ -68,7 +80,9 @@ export const useSignup = () => {
             //update state
             if (!isCancelled) {
                 setIsPending(false);
-                setError(null);
+                setEmailError(null);
+                setPassError(null);
+                setServerError(null);
             }   
             
             alertUser('success', 'Account Created!', 'You created your account! Do NOT refresh. Taking you to the home page...');
@@ -79,12 +93,14 @@ export const useSignup = () => {
             if (!isCancelled) {
                 alertUser('error', 'Something went wrong', err.message);
                 
-                setError(err.message);
+                setServerError(true);
+                setEmailError(true);
+                setPassError(true);
             }
         }
 
         setIsPending(false);
     }
 
-    return ( { signup, isPending } );
+    return ( { signup, emailError, passError, isPending } );
 }

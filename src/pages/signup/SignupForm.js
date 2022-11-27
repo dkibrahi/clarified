@@ -19,14 +19,12 @@ export default function SignupForm() {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const [label, setLabel] = useState('');
-
     const [displayAlert, setDisplayAlert] = useState(false);
     const [feedbackType, setFeedbackType] = useState('');
     const [feedbackTitle, setFeedbackTitle] = useState('');
     const [feedbackDesc, setFeedbackDesc] = useState('');
 
-    const { signup, isPending } = useSignup();
+    const { signup, emailError, passError, isPending } = useSignup();
     
     
     const handleSubmit = () => {
@@ -34,7 +32,6 @@ export default function SignupForm() {
     }
 
     const alertUser = (status, title, desc) => {
-        setLabel('error');
         setFeedbackType(status);
         setFeedbackTitle(title);
         setFeedbackDesc(desc);
@@ -44,6 +41,7 @@ export default function SignupForm() {
     return (
         <Form 
             title='Create Account'
+            emailError={emailError}
             isPending={isPending}
             displayAlert={displayAlert}
             feedbackType={feedbackType}
@@ -52,15 +50,18 @@ export default function SignupForm() {
             setInput={setEmail}
             handleSubmit={handleSubmit}
             setDisplayAlert={setDisplayAlert}>
-            
-                <TextField
-                className={styles["input-bar"]}
-          error={true}
-          id="outlined-error-helper-text"
-          label="Error"
-          defaultValue="Hello World"
-          helperText="Incorrect entry."
-        />
+                <Paper
+                className={styles[passError ? 'error-bar' : 'input-bar']}
+                sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
+                >
+                    <InputBase
+                        sx={{ ml: 1, flex: 1 }}
+                        type="password"
+                        placeholder="password"
+                        onChange={(e) => setPassword(e.target.value)}
+                        value={password}
+                    />
+                </Paper>
 
         </Form>
     )
