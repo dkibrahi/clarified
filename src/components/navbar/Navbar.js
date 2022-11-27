@@ -1,6 +1,7 @@
 // react imports
 import { Link } from 'react-router-dom';
 import { useLogout } from '../../hooks/useLogout';
+import { useAuthContext } from '../../context/useAuthContext';
 // icons
 import HomeIcon from '@mui/icons-material/Home';
 import AddIcon from '@mui/icons-material/Add';
@@ -11,11 +12,20 @@ import styles from './Navbar.module.css';
 
 export default function Navbar() {
   const { logout } = useLogout();
+  const { user } = useAuthContext();
 
   return (
     <nav className={styles.navbar}>
         <ul>
             <li className={styles.title}><Link to='/home'>Clarified</Link></li>
+            
+            {!user && (
+            <>
+              <li><Link to ="/login">Login</Link></li>
+              <li><Link tp="/singup">Signup</Link></li>
+            </>
+            )}
+            
             <li>
               <Link to='/home'>
               <HomeIcon color="primary"/>
@@ -31,9 +41,14 @@ export default function Navbar() {
               <ContactsIcon color="primary"/>
               </Link>
             </li>
+            {user && (
+            <>
+              <li>hello, {user.displayName}</li>
               <li> 
                 <button className="btn" onClick={logout}>Logout</button>
               </li>
+            </>
+            )}
         </ul>
     </nav>
   )
