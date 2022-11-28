@@ -23,9 +23,15 @@
 .navbar button,
 .navbar a {
     margin-left: 16px;
+    cursor: pointer;
 }
 
-.navbar a {
+.navbar a, .navbar .greeting {
     color: white;
     text-decoration: none;
+}
+
+.navbar .greeting {
+    margin: 0 0.5em;
+    font-size: 0.75em;
 }

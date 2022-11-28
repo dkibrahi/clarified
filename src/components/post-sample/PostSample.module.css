@@ -6,3 +6,7 @@
 .card .options {
     float: right;
 }
+
+.card p {
+    font-size: 0.8em;
+}

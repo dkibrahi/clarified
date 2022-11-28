@@ -1,6 +1,12 @@
 // react imports
 import { useState } from 'react'; 
 
+// component
+import Flag from './Flag';
+
+// functions/hooks
+import { useAuthContext } from '../../hooks/useAuthContext';
+
 // icons
 import IconButton from '@mui/material/IconButton';
 import Menu from '@mui/material/Menu';
@@ -8,18 +14,20 @@ import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
-import FlagIcon from '@mui/icons-material/Flag';
 
 // styles
 import styles from './MoreOptions.module.css';
-import PopUpDialog from '../popup-dialog/PopUpDialog';
+
 
 const ITEM_HEIGHT = 48;
 
 export default function MoreOptions(props) {
   const [showOptions, setShowOptions] = useState(null);
-  const [showDialog, setShowDialog] = useState(false);
   const open = Boolean(showOptions);
+
+  const { user, isAdmin } = useAuthContext();
+
+  const email = props.author + '@umich.edu';
 
   const handleClick = (e) => {
     setShowOptions(e.currentTarget);
@@ -37,11 +45,6 @@ export default function MoreOptions(props) {
   const handleEdit = () => {
     setShowOptions(null);
     props.handleEdit();
-  }
-
-  const handleSend = async (dialogDescription) => {
-    setShowDialog(false);
-    props.handleFlag(dialogDescription);
   }
 
   return (
@@ -71,17 +74,27 @@ export default function MoreOptions(props) {
           },
         }}
       >
+
         <div className={styles.toggleIcons}>
-          {props.displayEdit && <MenuItem key="edit" onClick={handleEdit}>
+          {props.displayEdit && email === user.email && 
+          <MenuItem key="edit" onClick={handleEdit}>
               <CreateIcon className={styles.editIcon}/> 
-          </MenuItem> }
-          {props.displayDelete && <MenuItem key="delete" onClick={handleDelete}>
+          </MenuItem> 
+          }
+
+          {props.displayDelete && email === user.email && 
+          <MenuItem key="delete" onClick={handleDelete}>
               <DeleteIcon className={styles.deleteIcon}/> 
           </MenuItem> }
-          {props.displayFlag && <MenuItem key="flag" onClick={() => setShowDialog(true)}>
-              <FlagIcon className={styles.flagIcon}/>
-              {showDialog && <PopUpDialog handleSend={handleSend}/> }
-          </MenuItem> }
+
+          {/* user cannot flag their own content */}
+          {email !== user.email &&
+          <Flag 
+            postID={props.postID}
+            author={user.displayName}
+            admin={isAdmin}
+          />
+          }
         </div>
       </Menu>
     </div>

@@ -7,10 +7,13 @@ import { Card, TextField, Snackbar } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 
-// components and functions
+// components
 import CreatePost from '../../components/create-post/CreatePost';
+
+// functions/hooks
 import { validTitle } from '../../functions/title';
 import savePost from '../../functions/savePost';
+import { useAuthContext } from '../../hooks/useAuthContext';
 
 // styles
 import styles from './AdminCreate.module.css';
@@ -27,8 +30,9 @@ export default function AdminCreate() {
 
     const [valid, setValid] = useState(null); // for save feature
 
-    let post = {title: '', content: ''};
+    const { user } = useAuthContext();
 
+    let post = {title: '', content: ''};
 
     const handleCancel = () => {
         history.push('/home');
@@ -46,7 +50,7 @@ export default function AdminCreate() {
         const ac = new AbortController();
 
         if (valid !== null && typeof valid !== 'undefined') {
-            savePost(setFeedbackType, setFeedbackTitle, setFeedbackDesc, newTitle, newContent, history, valid).then(res => {
+            savePost(setFeedbackType, setFeedbackTitle, setFeedbackDesc, newTitle, newContent, history, valid, user).then(res => {
                 setShowFeedback(true);
             })
         }
