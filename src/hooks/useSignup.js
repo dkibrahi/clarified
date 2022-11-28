@@ -44,7 +44,7 @@ export const useSignup = () => {
         }
 
         try {
-            await projFirestore.collection('users').doc(uniqname).get().then(data => {
+            const unsub = projFirestore.collection('users').doc(uniqname).get().then(data => {
                 if (!data.exists) {
                     alertUser('error', 'Roster Error', 'You are not on the list of students for this class. Please contact the professor');
 
@@ -53,9 +53,11 @@ export const useSignup = () => {
 
                 else {
                     const email = uniqname + '@umich.edu';
-                    createAccount(email, password, alertUser);
+                    createAccount(email, uniqname, password, alertUser);
                 }
             });
+
+            return () => unsub();
         } catch(err) {
             alertUser('error', 'Something went wrong', err.message);
             serverError(true);
@@ -66,13 +68,15 @@ export const useSignup = () => {
         }
     }
 
-    const createAccount = async (email, password, alertUser) => {
+    const createAccount = async (email, uniqname, password, alertUser) => {
         try {
             const res = await projAuth.createUserWithEmailAndPassword(email, password);
 
             if (!res){
                 throw new Error('Could not complete the signup');
             }
+
+            await res.user.updateProfile({ displayName: uniqname });
 
             //dispatch user login
             dispatch({ type: 'LOGIN', payload: res.user});

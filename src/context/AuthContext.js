@@ -30,7 +30,7 @@ export const AuthContextProvider = ({ children  }) => {
             let isAdmin = false;
 
             if (user) {
-                uniqname = user.email.substring(0, user.email.indexOf('@'));
+                uniqname = user.displayName;
             }
 
             try {

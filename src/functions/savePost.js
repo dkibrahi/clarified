@@ -13,10 +13,8 @@ const savePost = async (setFeedbackType, setFeedbackTitle, setFeedbackDesc, titl
 
     let linkTitle = cleanTitle(title);
 
-    const uniqname = user.email.substring(0, user.email.indexOf('@'));
-
     const doc = { 
-        author: uniqname,
+        author: user.displayName,
         title: title,
         content: content,
         date: new Date(),

@@ -26,7 +26,10 @@ export default function Form(props) {
 
     return (
         <>
-            <form className={styles["login-form"]} onKeyUp={(e) => handleSubmit(e)}>
+            <form 
+                className={styles["login-form"]} 
+                onSubmit={(e) => handleSubmit(e)} 
+                onKeyUp={(e) => handleSubmit(e)}>
                 <h2>{props.title}</h2>
                 <Paper
                     className={styles[props.emailError ? 'error-bar' : 'input-bar']}

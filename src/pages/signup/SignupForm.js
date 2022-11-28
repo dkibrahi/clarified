@@ -10,7 +10,6 @@ import { useSignup } from '../../hooks/useSignup';
 // icons
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
-import TextField from '@mui/material/TextField';
 
 // styles
 import styles from '../../components/Form/Form.module.css';
@@ -28,7 +27,9 @@ export default function SignupForm() {
     
     
     const handleSubmit = () => {
-        signup(email, password, alertUser);
+        const unsub = signup(email, password, alertUser);
+
+        return () => unsub();
     }
 
     const alertUser = (status, title, desc) => {

@@ -1,6 +1,9 @@
 // react imports
 import { useState } from 'react'; 
 
+// component
+import Flag from './Flag';
+
 // functions/hooks
 import { useAuthContext } from '../../hooks/useAuthContext';
 
@@ -11,20 +14,18 @@ import MenuItem from '@mui/material/MenuItem';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import DeleteIcon from '@mui/icons-material/Delete';
 import CreateIcon from '@mui/icons-material/Create';
-import FlagIcon from '@mui/icons-material/Flag';
 
 // styles
 import styles from './MoreOptions.module.css';
-import PopUpDialog from '../popup-dialog/PopUpDialog';
+
 
 const ITEM_HEIGHT = 48;
 
 export default function MoreOptions(props) {
   const [showOptions, setShowOptions] = useState(null);
-  const [showDialog, setShowDialog] = useState(false);
   const open = Boolean(showOptions);
 
-  const { user } = useAuthContext();
+  const { user, isAdmin } = useAuthContext();
 
   const email = props.author + '@umich.edu';
 
@@ -44,11 +45,6 @@ export default function MoreOptions(props) {
   const handleEdit = () => {
     setShowOptions(null);
     props.handleEdit();
-  }
-
-  const handleSend = async (dialogDescription) => {
-    setShowDialog(false);
-    props.handleFlag(dialogDescription);
   }
 
   return (
@@ -93,10 +89,12 @@ export default function MoreOptions(props) {
 
           {/* user cannot flag their own content */}
           {email !== user.email &&
-          <MenuItem key="flag" onClick={() => setShowDialog(true)}>
-              <FlagIcon className={styles.flagIcon}/>
-              {showDialog && <PopUpDialog handleSend={handleSend}/> }
-          </MenuItem> }
+          <Flag 
+            postID={props.postID}
+            author={user.displayName}
+            admin={isAdmin}
+          />
+          }
         </div>
       </Menu>
     </div>
