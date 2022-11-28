@@ -18,7 +18,7 @@ export default function Home() {
   useEffect(() => {
     setIsPending(true);
 
-    const unsub = projFirestore.collection('posts').orderBy('date').onSnapshot(snapshot => {
+    const unsub = projFirestore.collection('posts').orderBy('date').onSnapshot(snapshot => { //returns data instead of posts put reply to get specific reply for that post
       if (snapshot.empty) {
         setError("No posts to load");
         setIsPending(false);
@@ -28,7 +28,7 @@ export default function Home() {
         let results = [];
 
         snapshot.docs.forEach(doc => {
-          results.push( { id: doc.id, ...doc.data() });
+          results.push( { id: doc.id, ...doc.data() }); //this is grabbing data and pushing it into results array
         })
 
         results.reverse();

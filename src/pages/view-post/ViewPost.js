@@ -89,6 +89,14 @@ export default function ViewPost() {
         return () => ac.abort();
     }, [isEditing, postID]);
 
+    const handleReply = async () => { //this is for the reply button
+        await projFirestore.collection('replies').doc(post.id).collection('reply').add({ 
+        author: 'placeholder',
+        content: 'content',
+        date: new Date(),
+        });
+        console.log('reply added');
+    }
 
     const grabPostID = () => {
         if (!(titleLink.includes('-'))) {
@@ -165,7 +173,7 @@ export default function ViewPost() {
                             </CardContent>
                             <Divider />
                         </div>
-                        <Button size="small" variant="contained">
+                        <Button onClick={handleReply} size="small" variant="contained">
                             <ReplyIcon/>
                             <span>Reply</span>
                         </Button>
