@@ -84,10 +84,6 @@ export const useSignup = () => {
                 setPassError(null);
                 setServerError(null);
             }   
-            
-            alertUser('success', 'Account Created!', 'You created your account! Do NOT refresh. Taking you to the home page...');
-
-            setTimeout(() => history.push('/'), 2500);
         }
         catch (err) {
             if (!isCancelled) {

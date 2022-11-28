@@ -1,4 +1,6 @@
-import { createContext, useReducer } from "react";
+// react imports
+import { createContext, useReducer, useEffect } from "react";
+import { projFirestore, projAuth } from '../firebase/config';
 
 export const AuthContext = createContext();
 
@@ -9,7 +11,7 @@ export const authReducer = (state, action) => {
         case "LOGOUT":
             return { ...state, user: null };
         case "AUTH_IS_READY":
-            return { ...state, user: action.payload, authIsReady: true };
+            return { ...state, user: action.payload, isAdmin: action.isAdmin, authIsReady: true };
         default:
             return state;
     }
@@ -22,9 +24,35 @@ export const AuthContextProvider = ({ children  }) => {
     });
 
     useEffect(() => {
-        const unsub = projectAuth.onAuthStateChanged((user) => {
-            dispatch({ type: 'AUTH_IS_READY', payload: user });
-            unsub();
+        const unsub = projAuth.onAuthStateChanged((user) => {
+            let uniqname = '';
+
+            let isAdmin = false;
+
+            if (user) {
+                uniqname = user.email.substring(0, user.email.indexOf('@'));
+            }
+
+            try {
+                projFirestore.collection('users').doc(uniqname).get().then(data => {
+                if (data.exists) {
+                    const res = data.data();
+                    isAdmin = res.isAdmin;
+
+                    dispatch({ type: 'AUTH_IS_READY', isAdmin: isAdmin, payload: user });
+
+                    unsub();
+                }
+            });
+
+            } catch (err) {
+                console.log(err);
+
+                dispatch({ type: 'AUTH_IS_READY', isAdmin: isAdmin, payload: user });
+
+                unsub();
+            }
+
         })
 
     }, []);

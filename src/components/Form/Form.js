@@ -17,12 +17,16 @@ export default function Form(props) {
     const handleSubmit = (e) => {
         e.preventDefault();
 
+        if ('key' in e && e.key !== 'Enter') {
+            return;
+        }
+
         props.handleSubmit(); // let parent handle submit
     }
 
     return (
         <>
-            <form className={styles["login-form"]}>
+            <form className={styles["login-form"]} onKeyUp={(e) => handleSubmit(e)}>
                 <h2>{props.title}</h2>
                 <Paper
                     className={styles[props.emailError ? 'error-bar' : 'input-bar']}

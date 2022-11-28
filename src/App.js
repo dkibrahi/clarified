@@ -1,6 +1,6 @@
 // react imports
-import { BrowserRouter, Switch, Route, Switch, Redirect } from 'react-router-dom'
-import { useAuthContext } from '../context/useAuthContext';
+import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
+import { useAuthContext } from './hooks/useAuthContext';
 
 // components
 import Navbar from './components/navbar/Navbar';
@@ -21,13 +21,30 @@ function App() {
       <BrowserRouter>
         <Navbar />
         <Switch>
-          <Route exact path={'/'} component={Home}/>
-          <Route exact path={'/home'} component={Home}/>
-          <Route path={'/login'} component={Login}/>
-          <Route path={'/signup'} component={Signup}/>
-          <Route path={'/create'} component={AdminCreate}/>
-          <Route path={'/addstudent'} component={AddStudent}/>
-          <Route path='/posts/:titleLink' component={ViewPost}/>
+          <Route exact path={'/'}>
+            {!user && <Redirect to="/login"/>}
+            {user && <Home />}
+          </Route>
+          <Route path={'/login'}>
+            {user && <Redirect to="/"/>}
+            {!user && <Login />}
+          </Route>
+          <Route path={'/signup'}>
+            {user && <Redirect to="/"/>}
+            {!user && <Signup />}
+          </Route>
+          <Route path={'/create'}>
+            {!user && <Redirect to="/login"/>}
+            {user && <AdminCreate />}
+          </Route>
+          <Route path={'/addstudent'}>
+            {!user && <Redirect to="/login"/>}
+            {user && <AddStudent />}
+          </Route>
+          <Route path='/posts/:titleLink'>
+            {!user && <Redirect to="/login"/>}
+            {user && <ViewPost />}
+          </Route>
           <Route path={'*'} component={Error}/>
         </Switch>
       </BrowserRouter>
