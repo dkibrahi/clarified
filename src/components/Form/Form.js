@@ -1,69 +1,83 @@
 // react imports
 import { useState } from 'react';
 
-// components
-import AlertUser from '../alert-user/AlertUser';
-
 // mui
-import { Button } from '@mui/material';
 import Paper from '@mui/material/Paper';
 import InputBase from '@mui/material/InputBase';
 import Divider from '@mui/material/Divider';
+import Button from '@mui/material/Button';
+import { Snackbar } from '@mui/material';
+import Alert from '@mui/material/Alert';
+import AlertTitle from '@mui/material/AlertTitle';
 
 // styles
 import styles from './Form.module.css';
 
-export default function Form({ title, buttonText, handleSubmit, successMessage, failMessage }) {
-    const [input, setInput] = useState('');
-    const [shouldAlert, setShouldAlert] = useState(false);
-    const [alertSeverity, setAlertSeverity] = useState('') 
-    const [alertTitle, setAlertTitle] = useState('');
-    const [alertDescription, setAlertDescription] = useState('');
+export default function Form(props) {
+    const handleSubmit = (e) => {
+        e.preventDefault();
 
-    const handleInput = async () => {
-        setShouldAlert(false);
-        const response = await handleSubmit(input);
-
-        if (response) {
-            setAlertSeverity('success');
-            setAlertTitle('Success!');
-            setAlertDescription(successMessage);
+        if ('key' in e && e.key !== 'Enter') {
+            return;
         }
 
-        else {
-            setAlertSeverity('error');
-            setAlertTitle('Failed!');
-            setAlertDescription(failMessage);
-        }
-
-        setShouldAlert(true);
+        props.handleSubmit(); // let parent handle submit
     }
 
     return (
         <>
-            <form className={styles["login-form"]}>
-                <h2>{title}</h2>
+            <form 
+                className={styles["login-form"]} 
+                onSubmit={(e) => handleSubmit(e)} 
+                onKeyUp={(e) => handleSubmit(e)}>
+                <h2>{props.title}</h2>
                 <Paper
-                    component="form"
-                    className={styles["input-bar"]}
+                    className={styles[props.emailError ? 'error-bar' : 'input-bar']}
                     sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', width: 400 }}
                     >
                     <InputBase
                         sx={{ ml: 1, flex: 1 }}
                         placeholder="uniqname"
-                        onChange={(e) => setInput(e.target.value)}
+                        onChange={(e) => props.setInput(e.target.value)}
                     />
                     <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
                     <span>@umich.edu</span>
                 </Paper>
-                <Button variant="outlined" onClick={handleInput}>{buttonText}</Button>
+
+                {props.children}
+
+                {
+                    !props.isPending && 
+                    <Button 
+                        variant="outlined" 
+                        onClick={(e) => handleSubmit(e)}>
+                        Submit
+                    </Button>
+                }
+
+                {
+                    props.isPending && 
+                    <Button 
+                        variant="outlined">
+                        Loading...
+                    </Button>
+                }
+
+                {
+                    props.displayAlert && 
+                    <Snackbar 
+                        open={props.displayAlert} 
+                        onClose={() => props.setDisplayAlert(false)}>
+                            <Alert 
+                                severity={props.feedbackType}
+                                className={styles.alert}
+                                onClose={() => props.setDisplayAlert(false)}>
+                                <AlertTitle>{props.feedbackTitle}</AlertTitle>
+                                {props.feedbackDesc}
+                            </Alert>
+                    </Snackbar>
+                }
             </form>
-            {shouldAlert && <AlertUser 
-                display={shouldAlert}
-                severity={alertSeverity}
-                title={alertTitle}
-                description={alertDescription}
-            />}
         </>
     )
 }

@@ -46,8 +46,6 @@ export default function ViewPost() {
 
    
     useEffect(() => {
-        const ac = new AbortController();
-
         setIsPending(true);
 
         grabPostID();
@@ -57,7 +55,7 @@ export default function ViewPost() {
         }
         
         
-        projFirestore.collection('posts').doc(postID).get().then(snapshot => {
+        const unsub = projFirestore.collection('posts').doc(postID).get().then(snapshot => {
             if (snapshot.empty) {
                 setError("Post was not found");
                 setIsPending(false);
@@ -79,6 +77,8 @@ export default function ViewPost() {
                 }
                 
                 setIsPending(false);
+
+                return () => unsub();
             }
         
         }, (err) => {
@@ -86,7 +86,6 @@ export default function ViewPost() {
             setIsPending(false);
         });
 
-        return () => ac.abort();
     }, [isEditing, postID]);
 
 
@@ -133,11 +132,11 @@ export default function ViewPost() {
                 <MoreOptions 
                     size="small" 
                     postID={post.id}
+                    author={post.author}
                     handleDelete={handleDelete}
                     handleEdit={handleEdit}
                     displayEdit={true}
                     displayDelete={true}
-                    displayFlag={false}
                 />
 
                 {isEditing && 
@@ -159,6 +158,7 @@ export default function ViewPost() {
                     <>
                         <div className={styles.defaultPost}>
                             <h3>{post.title}</h3>
+                            <p>{post.author}</p>
                             <p>{postDate}</p>
                             <CardContent>
                                 <div>{post.content}</div>
