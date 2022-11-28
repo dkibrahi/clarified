@@ -43,13 +43,14 @@ export default function PostSample({ post }) {
         <MoreOptions 
           size="small" 
           postID={post.id}
+          author={post.author}
           handleDelete={handleDelete}
           handleEdit={sendToEdit}
           displayEdit={true}
           displayDelete={true}
-          displayFlag={false}
         />
         <h3>{post.title}</h3>
+        <p>{post.author}</p>
         <p>{postDate}</p>
         <CardContent>
           <div>{post.content.substring(0, 100)}</div>

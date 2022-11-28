@@ -16,7 +16,7 @@ import styles from './Navbar.module.css';
 
 export default function Navbar() {
   const { logout } = useLogout();
-  const { user } = useAuthContext();
+  const { user, isAdmin } = useAuthContext();
 
   return (
     <nav className={styles.navbar}>
@@ -30,7 +30,7 @@ export default function Navbar() {
           </>
           )}
 
-          {user && user.isAdmin && 
+          {user && isAdmin && 
             <>
               <li>
                 <Link to='/'>

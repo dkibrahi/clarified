@@ -13,7 +13,7 @@ import Signup from './pages/signup/Signup';
 import ViewPost from './pages/view-post/ViewPost';
 
 function App() {
-  const { authIsReady, user } = useAuthContext();
+  const { authIsReady, user, isAdmin } = useAuthContext();
 
   return (
     <div className="App">
@@ -34,11 +34,11 @@ function App() {
             {!user && <Signup />}
           </Route>
           <Route path={'/create'}>
-            {!user && <Redirect to="/login"/>}
+            {(!user || !isAdmin) && <Redirect to="/"/>}
             {user && <AdminCreate />}
           </Route>
           <Route path={'/addstudent'}>
-            {!user && <Redirect to="/login"/>}
+            {(!user || !isAdmin) && <Redirect to="/"/>}
             {user && <AddStudent />}
           </Route>
           <Route path='/posts/:titleLink'>

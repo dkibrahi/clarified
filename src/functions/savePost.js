@@ -1,10 +1,10 @@
 // react imports
 import { projFirestore } from '../firebase/config';
 
-// functions
+// functions/hooks
 import { cleanTitle } from '../functions/title';
 
-const savePost = async (setFeedbackType, setFeedbackTitle, setFeedbackDesc, title, content, history, isValid) => {
+const savePost = async (setFeedbackType, setFeedbackTitle, setFeedbackDesc, title, content, history, isValid, user) => {
     if (!isValid) {
         setFeedbackType('error');
         setFeedbackTitle('Error Creating Post');
@@ -13,8 +13,10 @@ const savePost = async (setFeedbackType, setFeedbackTitle, setFeedbackDesc, titl
 
     let linkTitle = cleanTitle(title);
 
+    const uniqname = user.email.substring(0, user.email.indexOf('@'));
+
     const doc = { 
-        author: 'placeholder',
+        author: uniqname,
         title: title,
         content: content,
         date: new Date(),
