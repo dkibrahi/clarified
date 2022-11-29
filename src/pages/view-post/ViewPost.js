@@ -99,7 +99,7 @@ export default function ViewPost() {
 
     const handleDelete = async () => {
         await projFirestore.collection('posts').doc(post.id).delete();
-        history.push('/home');
+        history.push('/');
     }
 
     const handleEdit = () => {
