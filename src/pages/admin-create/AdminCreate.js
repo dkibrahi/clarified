@@ -64,6 +64,7 @@ export default function AdminCreate() {
             <Card variant="outlined" className={styles.card}>
                 <CreatePost
                     post={post}
+                    displayCancel={true}
                     setView={handleCancel}
                     setNewContent={setNewContent}
                     handleSave={handleSave}>

@@ -12,19 +12,22 @@ export default function CreatePost(props) {
             <TextField
                 id="outlined-multiline-static"
                 onChange={(e) => props.setNewContent(e.target.value)}
-                label="Multiline"
+                label="Enter thoughts here"
                 multiline
                 rows={4}
                 defaultValue={props.post.content}
             />
 
             <div className={styles.editPostButtons}>
-                <Button 
-                    variant="contained" 
-                    onClick={() => props.setView(false)}
-                    className={styles.cancelButton}>
-                    Cancel
-                </Button>
+                {
+                    props.displayCancel && 
+                    <Button 
+                        variant="contained" 
+                        onClick={() => props.setView(false)}
+                        className={styles.cancelButton}>
+                        Cancel
+                    </Button>
+                }
                 <Button 
                     variant="contained" 
                     onClick={props.handleSave}

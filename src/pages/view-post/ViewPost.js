@@ -10,6 +10,7 @@ import Button from '@mui/material/Button';
 import Divider from '@mui/material/Divider';
 
 // components
+import HandleReplies from '../../components/handle-replies/HandleReplies';
 import MoreOptions from '../../components/more-options/MoreOptions';
 import CreatePost from '../../components/create-post/CreatePost';
 import Loading from '../../components/loading-screen/Loading';
@@ -142,6 +143,7 @@ export default function ViewPost() {
                 {isEditing && 
                     <CreatePost
                         post={post}
+                        displayCancel={true}
                         setNewContent={setNewContent}
                         setView={setIsEditing}
                         handleSave={handleSave}>
@@ -173,6 +175,8 @@ export default function ViewPost() {
                 }
             </Card>
        }
+
+       {post && <HandleReplies postID={postID}/> }
        </>
     )
 }
