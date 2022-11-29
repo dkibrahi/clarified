@@ -45,6 +45,7 @@ export default function Flag(props) {
             date: new Date()
         });
 
+        alertUser('success', 'Report submitted', 'A report was submitted/updated with the your concerns');
         setOpen(false);
     }
 
