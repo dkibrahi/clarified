@@ -19,6 +19,7 @@ import { cleanTitle } from '../../functions/title';
 
 // styles 
 import styles from './ViewPost.module.css';
+import ViewReplies from '../../components/view-reply/view-reply';
 
 export default function ViewPost() {
     const history = useHistory();
@@ -182,10 +183,10 @@ export default function ViewPost() {
                         </Button>
                     </>
                 }
+
+                <ViewReplies 
+                    postID={postID}/>
             </Card>
-
-            //put reply component for a post here
-
 
        }
        </>

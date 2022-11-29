@@ -6,11 +6,11 @@ import { useEffect, useState } from 'react';
 import styles from './Home.module.css';
 
 // components
-import UserPosts from '../../components/user-posts/UserPosts';
+import UserReply from '../../components/user-reply/UserReply';
 import Loading from '../../components/loading-screen/Loading';
 
 
-export default function Home() {
+export default function ViewReplies(props) {
   const [replies, setReplies] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
@@ -18,9 +18,8 @@ export default function Home() {
   useEffect(() => {
     setIsPending(true);
 
-    const unsub = projFirestore.collection('posts').doc(post.id).collection(reply).orderBy('date').onSnapshot(snapshot => {
+    const unsub = projFirestore.collection('replies').doc(props.postID).collection('reply').orderBy('date').onSnapshot(snapshot => {
       if (snapshot.empty) {
-        setError("No posts to load");
         setIsPending(false);
       }
 
