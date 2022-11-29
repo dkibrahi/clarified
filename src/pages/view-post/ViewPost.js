@@ -38,6 +38,9 @@ export default function ViewPost() {
 
     const [postID, setPostID] = useState('');
 
+    const [replies, setReplies] = useState('');
+    const [author, setAuthor] = useState('');
+
     useEffect(() => {
         if (data.state && 'edit' in data.state && data.state.edit) {
             setIsEditing(true);
@@ -87,7 +90,15 @@ export default function ViewPost() {
         });
 
     }, [isEditing, postID]);
-
+   
+    const handleReply = async () => { //this is for the reply button
+        await projFirestore.collection('replies').doc(post.id).collection('reply').add({ 
+        author: author,
+        content: newContent,
+        date: new Date(),
+        });
+        console.log('reply added');
+    }
 
     const grabPostID = () => {
         if (!(titleLink.includes('-'))) {
@@ -165,13 +176,17 @@ export default function ViewPost() {
                             </CardContent>
                             <Divider />
                         </div>
-                        <Button size="small" variant="contained">
+                        <Button onClick={handleReply} size="small" variant="contained">
                             <ReplyIcon/>
                             <span>Reply</span>
                         </Button>
                     </>
                 }
             </Card>
+
+            //put reply component for a post here
+
+
        }
        </>
     )

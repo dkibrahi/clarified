@@ -1,0 +1,12 @@
+.card {
+    margin: 0 15%;
+    padding: 1em;
+}
+
+.card .options {
+    float: right;
+}
+
+.card p {
+    font-size: 0.8em;
+}
