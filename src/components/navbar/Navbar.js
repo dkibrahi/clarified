@@ -18,7 +18,7 @@ import styles from './Navbar.module.css';
 export default function Navbar() {
   const { logout } = useLogout();
   const { user } = useAuthContext();
-  const { isAdmin } = useAdmin();
+  const { isAdmin } = useAdmin();  
 
   return (
     <nav className={styles.navbar}>

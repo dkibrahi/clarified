@@ -44,7 +44,7 @@ export const useSignup = () => {
         }
 
         try {
-            const unsub = projFirestore.collection('users').doc(uniqname).get().then(data => {
+            await projFirestore.collection('users').doc(uniqname).get().then(data => {
                 if (!data.exists) {
                     alertUser('error', 'Roster Error', 'You are not on the list of students for this class. Please contact the professor');
 
@@ -56,8 +56,6 @@ export const useSignup = () => {
                     createAccount(email, uniqname, password, alertUser);
                 }
             });
-
-            return () => unsub();
         } catch(err) {
             alertUser('error', 'Something went wrong', err.message);
             serverError(true);
@@ -66,6 +64,8 @@ export const useSignup = () => {
 
             setIsPending(false);
         }
+
+        return () => setIsPending(false);
     }
 
     const createAccount = async (email, uniqname, password, alertUser) => {
@@ -99,7 +99,7 @@ export const useSignup = () => {
             }
         }
 
-        setIsPending(false);
+        return () => setIsPending(false);        
     }
 
     return ( { signup, emailError, passError, isPending } );

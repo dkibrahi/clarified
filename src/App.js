@@ -1,6 +1,7 @@
 // react imports
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { useAuthContext } from './hooks/useAuthContext';
+import { useEffect } from 'react';
 
 // components
 import Navbar from './components/navbar/Navbar';
@@ -17,9 +18,15 @@ function App() {
   const { authIsReady, user } = useAuthContext();
   const { isAdmin } = useAdmin();
 
+  console.log("IN APP!!");
+  console.log(isAdmin);
+
+  // useEffect(() => {
+  // }, [isAdmin])
+
   return (
     <div className="App">
-      {authIsReady && (
+      {authIsReady && isAdmin !== 'null' && (
       <BrowserRouter>
         <Navbar />
         <Switch>

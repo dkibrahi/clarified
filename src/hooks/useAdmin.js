@@ -7,7 +7,7 @@ import { useAuthContext } from './useAuthContext';
 
 export const useAdmin = (uniqname) => {
     const { user } = useAuthContext();
-    const [isAdmin, setIsAdmin] = useState(false);
+    const [isAdmin, setIsAdmin] = useState(null);
 
 
     useEffect(() => {
@@ -16,16 +16,18 @@ export const useAdmin = (uniqname) => {
         }
 
         try {
-            const unsub = projFirestore.collection('users').doc(user.displayName).onSnapshot(snapshot => {
+            projFirestore.collection('users').doc(user.displayName).onSnapshot(snapshot => {
                 const data = {...snapshot.data()};
                 setIsAdmin(data.isAdmin);
-
-                return () => unsub();
             });
         } catch(err) {
             console.log(err);
         }
     }, [isAdmin, user])
+
+    useEffect(() => {
+        return () => setIsAdmin(null);
+    }, []);
 
     return { isAdmin };
     
