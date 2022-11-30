@@ -11,9 +11,11 @@ import Home from './pages/home/Home';
 import Login from './pages/login/Login';
 import Signup from './pages/signup/Signup';
 import ViewPost from './pages/view-post/ViewPost';
+import { useAdmin } from './hooks/useAdmin';
 
 function App() {
-  const { authIsReady, user, isAdmin } = useAuthContext();
+  const { authIsReady, user } = useAuthContext();
+  const { isAdmin } = useAdmin();
 
   return (
     <div className="App">
@@ -35,11 +37,11 @@ function App() {
           </Route>
           <Route path={'/create'}>
             {(!user || !isAdmin) && <Redirect to="/"/>}
-            {user && <AdminCreate />}
+            {user && isAdmin && <AdminCreate />}
           </Route>
           <Route path={'/addstudent'}>
             {(!user || !isAdmin) && <Redirect to="/"/>}
-            {user && <AddStudent />}
+            {user && isAdmin && <AddStudent />}
           </Route>
           <Route path='/posts/:titleLink'>
             {!user && <Redirect to="/login"/>}

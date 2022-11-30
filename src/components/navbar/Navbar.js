@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 // functions/hooks
 import { useLogout } from '../../hooks/useLogout';
 import { useAuthContext } from '../../hooks/useAuthContext';
+import { useAdmin } from '../../hooks/useAdmin';
 
 // icons
 import HomeIcon from '@mui/icons-material/Home';
@@ -16,7 +17,8 @@ import styles from './Navbar.module.css';
 
 export default function Navbar() {
   const { logout } = useLogout();
-  const { user, isAdmin } = useAuthContext();
+  const { user } = useAuthContext();
+  const { isAdmin } = useAdmin();
 
   return (
     <nav className={styles.navbar}>

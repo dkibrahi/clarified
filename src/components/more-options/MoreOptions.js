@@ -6,6 +6,7 @@ import Flag from './Flag';
 
 // functions/hooks
 import { useAuthContext } from '../../hooks/useAuthContext';
+import { useAdmin } from '../../hooks/useAdmin';
 
 // icons
 import IconButton from '@mui/material/IconButton';
@@ -25,7 +26,8 @@ export default function MoreOptions(props) {
   const [showOptions, setShowOptions] = useState(null);
   const open = Boolean(showOptions);
 
-  const { user, isAdmin } = useAuthContext();
+  const { user } = useAuthContext();
+  const { isAdmin } = useAdmin();
 
   const email = props.author + '@umich.edu';
 
