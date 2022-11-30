@@ -19,15 +19,13 @@ export default function CreatePost(props) {
             />
 
             <div className={styles.editPostButtons}>
-                {
-                    props.displayCancel && 
-                    <Button 
-                        variant="contained" 
-                        onClick={() => props.setView(false)}
-                        className={styles.cancelButton}>
-                        Cancel
-                    </Button>
-                }
+                <Button 
+                    variant="contained" 
+                    onClick={() => props.setView(false)}
+                    className={styles.cancelButton}>
+                    Cancel
+                </Button>
+                
                 <Button 
                     variant="contained" 
                     onClick={props.handleSave}

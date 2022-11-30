@@ -18,11 +18,6 @@ function App() {
   const { authIsReady, user } = useAuthContext();
   const { isAdmin } = useAdmin();
 
-  console.log("IN APP!!");
-  console.log(isAdmin);
-
-  // useEffect(() => {
-  // }, [isAdmin])
 
   return (
     <div className="App">

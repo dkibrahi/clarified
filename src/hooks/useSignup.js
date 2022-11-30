@@ -69,6 +69,8 @@ export const useSignup = () => {
     }
 
     const createAccount = async (email, uniqname, password, alertUser) => {
+        const ac = new AbortController();
+
         try {
             const res = await projAuth.createUserWithEmailAndPassword(email, password);
 
@@ -97,9 +99,9 @@ export const useSignup = () => {
                 setEmailError(true);
                 setPassError(true);
             }
-        }
-
-        return () => setIsPending(false);        
+        }   
+        
+        return () => ac.abort(); 
     }
 
     return ( { signup, emailError, passError, isPending } );

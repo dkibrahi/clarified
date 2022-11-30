@@ -35,7 +35,7 @@ export default function AdminCreate() {
     let post = {title: '', content: ''};
 
     const handleCancel = () => {
-        history.push('/home');
+        history.push('/');
     }
 
     const handleSave = async () => {
