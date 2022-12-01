@@ -1,0 +1,23 @@
+.reply-card {
+    margin-bottom: 1em;
+    padding-left: 1em;
+}
+
+.reply-card p {
+    font-size: 0.8em;
+}
+
+.reply-info {
+    display: flex;
+    flex-direction: row;
+    margin: 1em 0;
+}
+
+
+.reply-info p {
+    margin: auto 1em;
+}
+
+.reply-edit {
+    margin-top: 1em;
+}

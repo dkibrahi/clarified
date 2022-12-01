@@ -2,6 +2,9 @@
 import SingleReply from '../single-reply/SingleReply';
 
 
+// icons
+import Divider from '@mui/material/Divider';
+
 // component that takes ALL user posts and outputs them
 export default function UserReplies( { replies, postID } ) {
   if (replies.length === 0) {
@@ -17,6 +20,8 @@ export default function UserReplies( { replies, postID } ) {
               reply={reply}
               postID={postID}/>
         ))}
+
+       
     </div>
   )
 }

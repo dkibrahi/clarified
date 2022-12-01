@@ -18,7 +18,6 @@ export default function CreateReply(props) {
 
     const [newContent, setNewContent] = useState('');
     
-
     const post = {content: ''};   
 
     const handleSave = () => {
@@ -36,10 +35,11 @@ export default function CreateReply(props) {
     } 
 
     const handleChoice = async (choice) => {
-        const author = choice === 'd' ? props.displayName : 'anonymous'
+        const isAnonymous = choice === 'a' ? true: false;
 
         const doc  = {
-            author: author,
+            author: props.displayName,
+            isAnonymous: isAnonymous,
             content: newContent,
             date: new Date()
         }
@@ -78,7 +78,7 @@ export default function CreateReply(props) {
 
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Remaining anonymous means other users won't see that YOU SPECIFICALLY posted this comment. You can always change this by editing the reply.
+                        Remaining anonymous means other users won't see that YOU SPECIFICALLY posted this comment.
                     </DialogContentText>
                 </DialogContent>
 

@@ -82,8 +82,7 @@ export default function ViewPost() {
                     handleDelete={handleDelete}
                     handleEdit={handleEdit}
                     displayEdit={true}
-                    displayDelete={true}
-                />
+                    displayDelete={true}/>
 
                 {isEditing && 
                     <CreatePost

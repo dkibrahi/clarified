@@ -11,7 +11,6 @@ import { useAuthContext } from '../../hooks/useAuthContext';
 
 // icons
 import { Snackbar } from '@mui/material';
-import { Card } from '@mui/material';
 import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 
