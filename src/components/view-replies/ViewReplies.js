@@ -7,7 +7,7 @@ import Loading from '../loading-screen/Loading';
 import UserReplies from '../user-replies/UserReplies';
 
 
-export default function ViewReplies({ postID }) {
+export default function ViewReplies({ postID, alertUser }) {
   const [replies, setReplies] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
@@ -50,7 +50,7 @@ export default function ViewReplies({ postID }) {
     <div className='home'>
       {error && <p className='error'>{error}</p>}
       {isPending && <Loading />}
-      {replies && <UserReplies replies={replies} postID={postID}/>}
+      {replies && <UserReplies replies={replies} postID={postID} alertUser={alertUser}/>}
     </div>
   )
 }

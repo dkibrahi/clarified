@@ -4,7 +4,6 @@ import { useState } from 'react';
 
 // components
 import MoreOptions from '../more-options/MoreOptions';
-import CreatePost from '../create-post/CreatePost';
 
 // icons
 import { Card, CardContent } from '@mui/material';
@@ -13,9 +12,10 @@ import Avatar from '@mui/material/Avatar';
 
 // styles
 import styles from './SingleReply.module.css';
+import CreateReply from '../create-reply/CreateReply';
 
 
-export default function SingleReply({ reply, postID }) {
+export default function SingleReply({ alertUser, reply, postID }) {
   const [isEditing, setIsEditing] = useState(false);
 
   const [newContent, setNewContent] = useState('');
@@ -23,7 +23,7 @@ export default function SingleReply({ reply, postID }) {
   const author = reply.isAnonymous ? 'anonymous' : reply.author;
   const initial = author[0];
 
-  const post = {content: ''};  
+  const post = {content: reply.content};  
 
   const fireBaseTime = new Date(
       reply.date.seconds * 1000 + reply.date.nanoseconds / 1000000,
@@ -40,8 +40,18 @@ export default function SingleReply({ reply, postID }) {
     setIsEditing(true);
   }
 
-  const handleSave = async () => {
-    console.log('reached save');
+  const handleReply = async (isAnonymous, newContent) => {
+    await projFirestore.collection('replies').doc(postID).collection('reply').doc(reply.id).update({    
+        content: newContent,
+        isAnonymous: isAnonymous
+    }).then(res => {
+      setIsEditing(false);
+
+      const canSee = isAnonymous ? 'CANNOT' : 'CAN';
+
+      alertUser('success', 'Reply Updated!', 'Your reply updated and people ' + canSee + ' see your name');
+    });
+
   }
 
 
@@ -70,11 +80,12 @@ export default function SingleReply({ reply, postID }) {
 
       {isEditing && 
         <div className={styles["reply-edit"]}> 
-          <CreatePost
+          <CreateReply 
+            alertUser={alertUser}
+            displayName={reply.author}
             post={post}
             setView={setIsEditing}
-            setNewContent={setNewContent}
-            handleSave={handleSave}/>
+            handleReply={handleReply}/>
         </div>
       }
 

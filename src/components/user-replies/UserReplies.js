@@ -6,7 +6,7 @@ import SingleReply from '../single-reply/SingleReply';
 import Divider from '@mui/material/Divider';
 
 // component that takes ALL user posts and outputs them
-export default function UserReplies( { replies, postID } ) {
+export default function UserReplies( { replies, postID, alertUser } ) {
   if (replies.length === 0) {
     return <div className='error'>No replies found....</div>
   }
@@ -18,7 +18,8 @@ export default function UserReplies( { replies, postID } ) {
             <SingleReply 
               key={reply.id}
               reply={reply}
-              postID={postID}/>
+              postID={postID}
+              alertUser={alertUser}/>
         ))}
 
        

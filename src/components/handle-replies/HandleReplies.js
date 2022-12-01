@@ -21,7 +21,31 @@ export default function HandleReplies({ postID, view, setView }) {
     const [feedbackTitle, setFeedbackTitle] = useState('');
     const [feedbackDesc, setFeedbackDesc] = useState('');
 
+    const post = {content: ''};
+
     const { user } = useAuthContext();
+
+    const handleReply = async (isAnonymous, newContent) => {
+        const doc  = {
+            author: user.displayName,
+            isAnonymous: isAnonymous,
+            content: newContent,
+            date: new Date()
+        }
+
+        post.content = newContent;
+
+        try {
+            await projFirestore.collection('replies').doc(postID).collection('reply').add(doc);
+            alertUser('success', 'Reply Added!', 'The reply was added.'); 
+
+            setView(false);
+
+            return () => setView(false);
+        } catch (err) {
+            console.log(err);
+        }
+    }
 
     const alertUser = (status, title, desc) => {
         setFeedbackType(status);
@@ -36,12 +60,15 @@ export default function HandleReplies({ postID, view, setView }) {
                 <CreateReply 
                     alertUser={alertUser}
                     displayName={user.displayName}
-                    postID={postID}
-                    setView={setView}/>
+                    post={post}
+                    setView={setView}
+                    handleReply={handleReply}/>
             }
 
 
-            <ViewReplies postID={postID}/>
+            <ViewReplies 
+                postID={postID}
+                alertUser={alertUser}/>
 
             {showFeedback && 
                 <Snackbar 

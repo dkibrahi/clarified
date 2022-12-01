@@ -16,9 +16,8 @@ import DialogTitle from '@mui/material/DialogTitle';
 export default function CreateReply(props) {
     const [open, setOpen] = useState(false);
 
-    const [newContent, setNewContent] = useState('');
-    
-    const post = {content: ''};   
+    const [newContent, setNewContent] = useState(props.post.content);
+ 
 
     const handleSave = () => {
         if (newContent.length < 5) {
@@ -37,23 +36,7 @@ export default function CreateReply(props) {
     const handleChoice = async (choice) => {
         const isAnonymous = choice === 'a' ? true: false;
 
-        const doc  = {
-            author: props.displayName,
-            isAnonymous: isAnonymous,
-            content: newContent,
-            date: new Date()
-        }
-
-        try {
-            await projFirestore.collection('replies').doc(props.postID).collection('reply').add(doc);
-            props.alertUser('success', 'Reply Added!', 'The reply was added.'); 
-
-            props.setView(false);
-
-            return () => props.setView(false);
-        } catch (err) {
-            console.log(err);
-        }
+        props.handleReply(isAnonymous, newContent);
 
         setOpen(false);
     }
@@ -61,7 +44,7 @@ export default function CreateReply(props) {
     return (
         <>
             <CreatePost
-                post={post}
+                post={props.post}
                 setView={props.setView}
                 setNewContent={setNewContent}
                 handleSave={handleSave} />
@@ -78,13 +61,13 @@ export default function CreateReply(props) {
 
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Remaining anonymous means other users won't see that YOU SPECIFICALLY posted this comment.
+                        Remaining anonymous means other users won't see that YOU SPECIFICALLY posted this comment. You can always change this by editing the reply once it's submitted
                     </DialogContentText>
                 </DialogContent>
 
                 <DialogActions>
-                    <Button onClick={() => {handleChoice('d')}}>Disagree</Button>
-                    <Button onClick={() => {handleChoice('a')}}>Agree</Button>
+                    <Button onClick={() => {handleChoice('d')}}>No, show my name!</Button>
+                    <Button onClick={() => {handleChoice('a')}}>Remain anonymous</Button>
                 </DialogActions>
             </Dialog>
 
