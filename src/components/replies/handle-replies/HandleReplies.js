@@ -1,13 +1,13 @@
 // react import
 import { useState } from 'react';
-import { projFirestore } from '../../firebase/config';
+import { projFirestore } from '../../../firebase/config';
 
 // components
-import ViewReplies from '../../components/view-replies/ViewReplies';
+import ViewReplies from '../view-replies/ViewReplies';
 import CreateReply from '../create-reply/CreateReply';
 
 // functions/hooks
-import { useAuthContext } from '../../hooks/useAuthContext';
+import { useAuthContext } from '../../../hooks/useAuthContext';
 
 // icons
 import { Snackbar } from '@mui/material';
@@ -15,7 +15,7 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 
 
-export default function HandleReplies({ postID, view, setView }) {
+export default function HandleReplies({ postID, path, view, setView }) {
     const [showFeedback, setShowFeedback] = useState(false); // if user alert should be shown
     const [feedbackType, setFeedbackType] = useState('');
     const [feedbackTitle, setFeedbackTitle] = useState('');
@@ -36,7 +36,7 @@ export default function HandleReplies({ postID, view, setView }) {
         post.content = newContent;
 
         try {
-            await projFirestore.collection('replies').doc(postID).collection('reply').add(doc);
+            await path.add(doc);
             alertUser('success', 'Reply Added!', 'The reply was added.'); 
 
             setView(false);
@@ -67,6 +67,7 @@ export default function HandleReplies({ postID, view, setView }) {
 
 
             <ViewReplies 
+                path={path}
                 postID={postID}
                 alertUser={alertUser}/>
 

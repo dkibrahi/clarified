@@ -1,7 +1,6 @@
 // react imports
 import { BrowserRouter, Switch, Route, Redirect } from 'react-router-dom'
 import { useAuthContext } from './hooks/useAuthContext';
-import { useEffect } from 'react';
 
 // components
 import Navbar from './components/navbar/Navbar';

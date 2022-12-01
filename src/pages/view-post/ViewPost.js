@@ -4,9 +4,9 @@ import { useLocation, useHistory, useParams } from "react-router-dom";
 import { useState, useEffect } from 'react';
 
 // components
-import HandleReplies from '../../components/handle-replies/HandleReplies';
+import HandleReplies from '../../components/replies/handle-replies/HandleReplies';
 import MoreOptions from '../../components/more-options/MoreOptions';
-import CreatePost from '../../components/create-post/CreatePost';
+import CreatePost from '../../components/posts/create-post/CreatePost';
 import Loading from '../../components/loading-screen/Loading';
 
 // functions/hooks
@@ -35,13 +35,20 @@ export default function ViewPost() {
     const [newContent, setNewContent] = useState('');
     const [postDate, setPostDate] = useState(null);
 
+    const [path, setPath] = useState(null);
+
     const { isPending, error, post, postID } = usePost(isEditing, titleLink, setPostDate, setNewTitle, setNewContent);
 
     useEffect(() => {
         if (data.state && 'edit' in data.state && data.state.edit) {
             setIsEditing(true);
         }
-    }, []);
+
+        if (postID) {
+            setPath(projFirestore.collection('replies').doc(postID).collection('reply'));
+            console.log(path);
+        }
+    }, [postID]);
 
     const handleDelete = async () => {
         await projFirestore.collection('posts').doc(post.id).delete();
@@ -123,8 +130,9 @@ export default function ViewPost() {
             </Card>
        }
 
-       {post && 
+       {post && path && 
        <HandleReplies 
+            path={path}
             postID={postID}
             view={view}
             setView={setView}/> 

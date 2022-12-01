@@ -8,7 +8,7 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 
 // components
-import CreatePost from '../../components/create-post/CreatePost';
+import CreatePost from '../../components/posts/create-post/CreatePost';
 
 // functions/hooks
 import { validTitle } from '../../functions/title';

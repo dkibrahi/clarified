@@ -1,24 +1,31 @@
 // react imports
-import { projFirestore } from '../../firebase/config';
-import { useState } from 'react';
+import { projFirestore } from '../../../firebase/config';
+import { useState, useEffect } from 'react';
 
 // components
-import MoreOptions from '../more-options/MoreOptions';
+import MoreOptions from '../../more-options/MoreOptions';
+import CreateReply from '../create-reply/CreateReply';
+import HandleReplies from '../handle-replies/HandleReplies';
 
 // icons
 import { Card, CardContent } from '@mui/material';
 import Divider from '@mui/material/Divider';
 import Avatar from '@mui/material/Avatar';
+import ReplyIcon from '@mui/icons-material/Reply';
+import Button from '@mui/material/Button';
 
 // styles
 import styles from './SingleReply.module.css';
-import CreateReply from '../create-reply/CreateReply';
 
 
-export default function SingleReply({ alertUser, reply, postID }) {
+export default function SingleReply({ alertUser, reply, postID, path }) {
   const [isEditing, setIsEditing] = useState(false);
+  const [view, setView] = useState(false);
 
   const [newContent, setNewContent] = useState('');
+
+  const newPath = path.doc(reply.id).collection('replies');
+
 
   const author = reply.isAnonymous ? 'anonymous' : reply.author;
   const initial = author[0];
@@ -32,7 +39,7 @@ export default function SingleReply({ alertUser, reply, postID }) {
   const replyDate = fireBaseTime.toDateString();
 
   const handleDelete = async () => {
-    await projFirestore.collection('replies').doc(postID).collection('reply').doc(reply.id).delete();
+    await path.doc(reply.id).delete();
     window.location.reload();
   }
 
@@ -41,7 +48,7 @@ export default function SingleReply({ alertUser, reply, postID }) {
   }
 
   const handleReply = async (isAnonymous, newContent) => {
-    await projFirestore.collection('replies').doc(postID).collection('reply').doc(reply.id).update({    
+    await path.doc(reply.id).update({    
         content: newContent,
         isAnonymous: isAnonymous
     }).then(res => {
@@ -56,7 +63,7 @@ export default function SingleReply({ alertUser, reply, postID }) {
 
 
   return (
-    <Card className={styles["reply-card"]}>
+    <div className={styles["reply-card"]}>
       <MoreOptions 
         size="small" 
         postID={reply.id}
@@ -72,12 +79,6 @@ export default function SingleReply({ alertUser, reply, postID }) {
       </div>
       <p>{replyDate}</p>
 
-      {!isEditing && 
-        <CardContent>
-          <div>{reply.content}</div>
-        </CardContent>
-      }
-
       {isEditing && 
         <div className={styles["reply-edit"]}> 
           <CreateReply 
@@ -89,7 +90,33 @@ export default function SingleReply({ alertUser, reply, postID }) {
         </div>
       }
 
-      <Divider />
-    </Card>
+      {!isEditing && 
+      <>
+        <CardContent>
+          <div>{reply.content}</div>
+        </CardContent>
+
+        <Divider />
+
+        <Button 
+            size="small" 
+            variant="contained"
+            className={styles["reply-button"]}
+            onClick={() => setView(true)}>
+              <ReplyIcon/>
+              <span>Reply</span>
+        </Button>    
+      </>
+      } 
+
+      {reply && path && 
+       <HandleReplies 
+            path={newPath}
+            postID={postID}
+            view={view}
+            setView={setView}/> 
+       }
+
+    </div>
   )
 }

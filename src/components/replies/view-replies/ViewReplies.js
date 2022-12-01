@@ -1,13 +1,13 @@
 // react imports
-import { projFirestore } from '../../firebase/config';
+import { projFirestore } from '../../../firebase/config';
 import { useEffect, useState } from 'react';
 
 // components
-import Loading from '../loading-screen/Loading';
+import Loading from '../../loading-screen/Loading';
 import UserReplies from '../user-replies/UserReplies';
 
 
-export default function ViewReplies({ postID, alertUser }) {
+export default function ViewReplies({ path, postID, alertUser }) {
   const [replies, setReplies] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
@@ -17,7 +17,7 @@ export default function ViewReplies({ postID, alertUser }) {
 
     console.log("reached view replies");
 
-    const unsub = projFirestore.collection('replies').doc(postID).collection('reply').orderBy('date').onSnapshot(snapshot => {
+    const unsub = path.orderBy('date').onSnapshot(snapshot => {
       if (snapshot.empty) {
         setIsPending(false);
       }
@@ -50,7 +50,12 @@ export default function ViewReplies({ postID, alertUser }) {
     <div className='home'>
       {error && <p className='error'>{error}</p>}
       {isPending && <Loading />}
-      {replies && <UserReplies replies={replies} postID={postID} alertUser={alertUser}/>}
+      {replies && 
+      <UserReplies 
+        replies={replies} 
+        postID={postID} 
+        alertUser={alertUser}
+        path={path}/>}
     </div>
   )
 }

@@ -6,7 +6,7 @@ import { useEffect, useState } from 'react';
 import styles from './Home.module.css';
 
 // components
-import UserPosts from '../../components/user-posts/UserPosts';
+import UserPosts from '../../components/posts/user-posts/UserPosts';
 import Loading from '../../components/loading-screen/Loading';
 
 

@@ -1,9 +1,8 @@
 // react import
 import { useState } from 'react';
-import { projFirestore } from '../../firebase/config';
 
 // components
-import CreatePost from '../create-post/CreatePost';
+import CreatePost from '../../posts/create-post/CreatePost';
 
 // icons
 import Button from '@mui/material/Button';
