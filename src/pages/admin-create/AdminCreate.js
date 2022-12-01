@@ -8,7 +8,7 @@ import Alert from '@mui/material/Alert';
 import AlertTitle from '@mui/material/AlertTitle';
 
 // components
-import CreatePost from '../../components/create-post/CreatePost';
+import CreatePost from '../../components/posts/create-post/CreatePost';
 
 // functions/hooks
 import { validTitle } from '../../functions/title';
@@ -35,7 +35,7 @@ export default function AdminCreate() {
     let post = {title: '', content: ''};
 
     const handleCancel = () => {
-        history.push('/home');
+        history.push('/');
     }
 
     const handleSave = async () => {
@@ -64,6 +64,7 @@ export default function AdminCreate() {
             <Card variant="outlined" className={styles.card}>
                 <CreatePost
                     post={post}
+                    displayCancel={true}
                     setView={handleCancel}
                     setNewContent={setNewContent}
                     handleSave={handleSave}>

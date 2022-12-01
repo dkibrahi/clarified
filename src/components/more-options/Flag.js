@@ -43,8 +43,11 @@ export default function Flag(props) {
             description: description,
             admin: props.admin,
             date: new Date()
+        }).then(res => {
+            alertUser('success', 'Report submitted/updated', 'A member of our team will review the report and contact you with updates. If you\'ve already submitted a report, we will go with the one you\'ve just submitted.');
         });
 
+        alertUser('success', 'Report submitted', 'A report was submitted/updated with the your concerns');
         setOpen(false);
     }
 

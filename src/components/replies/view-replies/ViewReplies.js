@@ -1,26 +1,24 @@
 // react imports
-import { projFirestore } from '../../firebase/config';
+import { projFirestore } from '../../../firebase/config';
 import { useEffect, useState } from 'react';
 
-// styles
-import styles from './Home.module.css';
-
 // components
-import UserPosts from '../../components/posts/user-posts/UserPosts';
-import Loading from '../../components/loading-screen/Loading';
+import Loading from '../../loading-screen/Loading';
+import UserReplies from '../user-replies/UserReplies';
 
 
-export default function Home() {
-  const [posts, setPosts] = useState(null);
+export default function ViewReplies({ path, postID, alertUser }) {
+  const [replies, setReplies] = useState(null);
   const [isPending, setIsPending] = useState(false);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     setIsPending(true);
 
-    const unsub = projFirestore.collection('posts').orderBy('date').onSnapshot(snapshot => {
+    console.log("reached view replies");
+
+    const unsub = path.orderBy('date').onSnapshot(snapshot => {
       if (snapshot.empty) {
-        setError("No posts to load");
         setIsPending(false);
       }
 
@@ -33,7 +31,9 @@ export default function Home() {
 
         results.reverse();
 
-        setPosts(results);
+        console.log(results);
+
+        setReplies(results);
         setIsPending(false);
       }
     
@@ -50,7 +50,12 @@ export default function Home() {
     <div className='home'>
       {error && <p className='error'>{error}</p>}
       {isPending && <Loading />}
-      {posts && <UserPosts posts={posts} />}
+      {replies && 
+      <UserReplies 
+        replies={replies} 
+        postID={postID} 
+        alertUser={alertUser}
+        path={path}/>}
     </div>
   )
 }

@@ -1,0 +1,32 @@
+.reply-card {
+    margin-bottom: 1em;
+    padding-left: 1em;
+    background-color: #fff;
+    border-left: 1px solid rgba(0, 0, 0, 0.12);
+}
+
+
+.reply-card p {
+    font-size: 0.8em;
+}
+
+
+.reply-info {
+    display: flex;
+    flex-direction: row;
+    margin: 1em 0;
+    padding-top: 1em;
+}
+
+
+.reply-info p {
+    margin: auto 1em;
+}
+
+.reply-edit {
+    margin-top: 1em;
+}
+
+.reply-card .reply-button {
+    margin: 1.5em 0;
+}

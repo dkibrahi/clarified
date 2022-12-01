@@ -11,7 +11,7 @@ export const authReducer = (state, action) => {
         case "LOGOUT":
             return { ...state, user: null };
         case "AUTH_IS_READY":
-            return { ...state, user: action.payload, isAdmin: action.isAdmin, authIsReady: true };
+            return { ...state, user: action.payload, authIsReady: true };
         default:
             return state;
     }
@@ -27,32 +27,13 @@ export const AuthContextProvider = ({ children  }) => {
         const unsub = projAuth.onAuthStateChanged((user) => {
             let uniqname = '';
 
-            let isAdmin = false;
-
             if (user) {
                 uniqname = user.displayName;
             }
 
-            try {
-                projFirestore.collection('users').doc(uniqname).get().then(data => {
-                if (data.exists) {
-                    const res = data.data();
-                    isAdmin = res.isAdmin;
+            dispatch({ type: 'AUTH_IS_READY', payload: user });
 
-                    dispatch({ type: 'AUTH_IS_READY', isAdmin: isAdmin, payload: user });
-
-                    unsub();
-                }
-            });
-
-            } catch (err) {
-                console.log(err);
-
-                dispatch({ type: 'AUTH_IS_READY', isAdmin: isAdmin, payload: user });
-
-                unsub();
-            }
-
+            return () => unsub();
         })
 
     }, []);

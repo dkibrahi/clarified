@@ -10,6 +10,7 @@
 
 .editPost .editPostButtons {
     flex-direction: row;
+    margin-bottom: 1em;
 }
 
 .editPost .saveButton {
