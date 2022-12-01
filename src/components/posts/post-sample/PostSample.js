@@ -1,5 +1,5 @@
 // react imports
-import { projFirestore } from '../../firebase/config';
+import { projFirestore } from '../../../firebase/config';
 import { useHistory } from 'react-router-dom';
 
 // icons
@@ -7,8 +7,8 @@ import { Card, CardContent, Fab } from '@mui/material';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 
 // components and functions
-import MoreOptions from '../more-options/MoreOptions';
-import { cleanTitle } from '../../functions/title';
+import MoreOptions from '../../more-options/MoreOptions';
+import { cleanTitle } from '../../../functions/title';
 
 // styles 
 import styles from './PostSample.module.css';

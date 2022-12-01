@@ -38,7 +38,7 @@ export const useLogin = () => {
         }
         catch (err) {
             if (!isCancelled) {
-                alertUser('error', 'Email and Password don\'t match match', err.message);
+                alertUser('error', 'Email and Password don\'t match', err.message);
                 setError(true);
                 setIsPending(false);
             }
