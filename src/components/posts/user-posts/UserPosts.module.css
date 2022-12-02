@@ -3,3 +3,11 @@
     flex-direction: column;
     gap: 2vw;
 }
+
+.posts-list .chip {
+    margin: 0 15%;
+    margin-top: 1em;
+    background-color: #1976d2;
+    color: white;
+    font-size: 1.25em;
+}

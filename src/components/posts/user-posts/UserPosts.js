@@ -1,6 +1,9 @@
 // components
 import PostSample from '../post-sample/PostSample';
 
+// icons
+import Chip from '@mui/material/Chip';
+
 // styles 
 import styles from './UserPosts.module.css';
 
@@ -13,9 +16,13 @@ export default function UserPosts( { posts } ) {
 
   return (
     <div className={styles["posts-list"]}>
-        {posts.map((post) => (
-            <PostSample key={post.id} post={post} />
-        ))}
+      <Chip 
+        label="Latest Posts" 
+        variant="filled" 
+        className={styles.chip}/>
+      {posts.map((post) => (
+          <PostSample key={post.id} post={post} />
+      ))}
     </div>
   )
 }
