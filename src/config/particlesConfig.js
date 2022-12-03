@@ -4,68 +4,74 @@ const particlesConfig = {
             value: "#1976d2",
         },
     },
+    fullScreen: { enable: true },
     fpsLimit: 60,
     interactivity: {
-    events: {
+        events: {
         onClick: {
-        enable: true,
-        mode: "push",
+            enable: true,
+            mode: 'push',
         },
         onHover: {
-        enable: true,
-        mode: "repulse",
+            enable: true,
+            mode: 'repulse',
         },
         resize: true,
-    },
-    modes: {
+        },
+        modes: {
         push: {
-        quantity: 4,
+            quantity: 4,
         },
         repulse: {
-        distance: 100,
+            distance: 200,
+            duration: 0.4,
         },
-    },
+        },
     },
     particles: {
-    color: {
-        value: "#ffffff",
-    },
-    links: {
-        color: "#ffffff",
-        distance: 150,
-        enable: true,
-        opacity: 0.5,
-        width: 1,
-    },
-    collisions: {
-        enable: true,
-    },
-    move: {
-        directions: "none",
-        enable: true,
-        outModes: {
-        default: "bounce",
+        color: {
+            value: '#ffffff',
         },
-        random: false,
-        speed: 2,
-        straight: false,
-    },
-    number: {
-        density: {
-        enable: true,
-        area: 800,
+
+        links: {
+            color: '#ffffff',
+            distance: 150,
+            enable: true,
+            opacity: 0.5,
+            width: 1,
         },
-        value: 80,
-    },
-    opacity: {
-        value: 0.5,
-    },
-    shape: {
-        type: "circle",
-    },
-    size: {
-        value: { min: 1, max: 5 },
-    },
+
+        collisions: {
+            enable: false,
+        },
+
+        move: {
+            directions: 'none',
+            enable: true,
+            random: true,
+            speed: 2,
+            straight: false,
+            bounce: false,
+        },
+
+        number: {
+            density: {
+                enable: true,
+                area: 800,
+            },
+            value: 80,
+        },
+
+        opacity: {
+            value: 1,
+        },
+
+        shape: {
+            type: 'circle',
+        },
+        size: {
+            value: { min: 1, max: 5 },
+        },
     },
     detectRetina: true,
 }

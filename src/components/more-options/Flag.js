@@ -59,7 +59,10 @@ export default function Flag(props) {
 
     return (
         <>
-            <MenuItem key="flag" onClick={() => setOpen(true)}>
+            <MenuItem 
+                key="flag" 
+                onClick={() => setOpen(true)}
+                data-testid="flag">
                 <FlagIcon className={styles.flagIcon}/>
             </MenuItem>
 
