@@ -50,7 +50,7 @@ export default function PostSample({ post }) {
           displayDelete={true}
         />
         <h3>{post.title}</h3>
-        <p>{post.author}</p>
+        <p>Posted by: {post.author}</p>
         <p>{postDate}</p>
         <CardContent>
           <div>{post.content.substring(0, 100)}</div>

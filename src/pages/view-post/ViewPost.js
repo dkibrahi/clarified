@@ -111,7 +111,7 @@ export default function ViewPost() {
                     <>
                         <div className={styles.defaultPost}>
                             <h3>{post.title}</h3>
-                            <p>{post.author}</p>
+                            <p>Posted by: {post.author}</p>
                             <p>{postDate}</p>
                             <CardContent>
                                 <div>{post.content}</div>
